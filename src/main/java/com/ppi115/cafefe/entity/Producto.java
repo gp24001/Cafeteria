@@ -1,0 +1,166 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.ppi115.cafefe.entity;
+
+import com.ppi115.cafefe.UUIDConverter;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ *
+ * @author jazmi
+ */
+@Entity
+@Table(name = "producto", catalog = "cafeteria", schema = "public")
+@NamedQueries({
+    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p")})
+public class Producto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Lob
+    @Column(name = "id_producto", nullable = false)
+    @Convert(converter = UUIDConverter.class) //converter convierte de UUID a UUID
+    private UUID idProducto;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 150)
+    @Column(name = "nombre", nullable = false, length = 150)
+    private String nombre;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "activo", nullable = false)
+    private boolean activo;
+    @Size(max = 2147483647)
+    @Column(name = "comentarios", length = 2147483647)
+    private String comentarios;
+    @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
+    private List<ProductoCaracteristica> productoCaracteristicaList;
+    @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
+    private List<OrdenProducto> ordenProductoList;
+    @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
+    private List<DescuentoProducto> descuentoProductoList;
+    @OneToMany(mappedBy = "idProducto", fetch = FetchType.LAZY)
+    private List<ProductoTipoProducto> productoTipoProductoList;
+
+    public Producto() {
+    }
+
+    public Producto(UUID idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public Producto(UUID idProducto, String nombre, boolean activo) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.activo = activo;
+    }
+
+    public UUID getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(UUID idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public String getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(String comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public List<ProductoCaracteristica> getProductoCaracteristicaList() {
+        return productoCaracteristicaList;
+    }
+
+    public void setProductoCaracteristicaList(List<ProductoCaracteristica> productoCaracteristicaList) {
+        this.productoCaracteristicaList = productoCaracteristicaList;
+    }
+
+    public List<OrdenProducto> getOrdenProductoList() {
+        return ordenProductoList;
+    }
+
+    public void setOrdenProductoList(List<OrdenProducto> ordenProductoList) {
+        this.ordenProductoList = ordenProductoList;
+    }
+
+    public List<DescuentoProducto> getDescuentoProductoList() {
+        return descuentoProductoList;
+    }
+
+    public void setDescuentoProductoList(List<DescuentoProducto> descuentoProductoList) {
+        this.descuentoProductoList = descuentoProductoList;
+    }
+
+    public List<ProductoTipoProducto> getProductoTipoProductoList() {
+        return productoTipoProductoList;
+    }
+
+    public void setProductoTipoProductoList(List<ProductoTipoProducto> productoTipoProductoList) {
+        this.productoTipoProductoList = productoTipoProductoList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idProducto != null ? idProducto.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Producto)) {
+            return false;
+        }
+        Producto other = (Producto) object;
+        if ((this.idProducto == null && other.idProducto != null) || (this.idProducto != null && !this.idProducto.equals(other.idProducto))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.ppi115.cafefe.entity.Producto[ idProducto=" + idProducto + " ]";
+    }
+    
+}

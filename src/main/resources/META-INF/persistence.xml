@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="Cafefe-PU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/pgdb</jta-data-source>
+    <class>com.ppi115.cafefe.entity.OrdenProducto</class>
+    <class>com.ppi115.cafefe.entity.Rol</class>
+    <class>com.ppi115.cafefe.entity.DescuentoProducto</class>
+    <class>com.ppi115.cafefe.entity.TipoCaracteristica</class>
+    <class>com.ppi115.cafefe.entity.TipoProducto</class>
+    <class>com.ppi115.cafefe.entity.EmpleadoRol</class>
+    <class>com.ppi115.cafefe.entity.Pago</class>
+    <class>com.ppi115.cafefe.entity.TipoDescuento</class>
+    <class>com.ppi115.cafefe.entity.FacturaOrdenProducto</class>
+    <class>com.ppi115.cafefe.entity.PagoDetalle</class>
+    <class>com.ppi115.cafefe.entity.Empleado</class>
+    <class>com.ppi115.cafefe.entity.TipoEstadoOrden</class>
+    <class>com.ppi115.cafefe.entity.Caracteristica</class>
+    <class>com.ppi115.cafefe.entity.TipoPago</class>
+    <class>com.ppi115.cafefe.entity.ProductoCaracteristica</class>
+    <class>com.ppi115.cafefe.entity.Factura</class>
+    <class>com.ppi115.cafefe.entity.Caja</class>
+    <class>com.ppi115.cafefe.entity.ProductoTipoProducto</class>
+    <class>com.ppi115.cafefe.entity.Descuento</class>
+    <class>com.ppi115.cafefe.entity.Producto</class>
+    <class>com.ppi115.cafefe.entity.Orden</class>
+    <properties>
+      <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+      <property name="eclipselink.logging.level.sql" value="FINE"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>
