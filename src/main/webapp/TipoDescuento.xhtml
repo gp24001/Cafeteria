@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+    <h:head>
+        <title>Tipos de Descuento</title>
+    </h:head>
+    <h:body>
+        <h1>Tipos de Descuento</h1>
+
+     
+        <h:form id="formTipoDescuento">
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Nombre:" />
+                <h:inputText value="#{tipoDescuentoModel.registro.nombre}" />
+
+                <h:outputLabel value="Observaciones:" />
+                <h:inputTextarea value="#{tipoDescuentoModel.registro.observaciones}" />
+
+                <h:outputLabel value="Descuento Máximo:" />
+                <h:inputText value="#{tipoDescuentoModel.registro.descuentoMaximo}" />
+
+                <h:outputLabel value="Activo:" />
+                <h:selectBooleanCheckbox value="#{tipoDescuentoModel.registro.activo}" />
+            </h:panelGrid>
+
+            <h:commandButton value="Nuevo"
+                             actionListener="#{tipoDescuentoModel.btnNuevo}"
+                             immediate="true"
+                             rendered="#{tipoDescuentoModel.estado == 'NINGUNO'}" />
+
+            <h:commandButton value="Guardar"
+                             actionListener="#{tipoDescuentoModel.btnGuardar}"
+                             rendered="#{tipoDescuentoModel.estado == 'NUEVO'
+                                      or tipoDescuentoModel.estado == 'EDITAR'}" />
+
+            <h:commandButton value="Cancelar"
+                             actionListener="#{tipoDescuentoModel.btnCancelar}"
+                             immediate="true"
+                             rendered="#{tipoDescuentoModel.estado == 'NUEVO'
+                                      or tipoDescuentoModel.estado == 'EDITAR'}" />
+        </h:form>
+
+        <h:form>
+            <h:dataTable value="#{tipoDescuentoModel.list}" var="r" border="1">
+                <h:column>
+                    <f:facet name="header">ID</f:facet>
+                    #{r.idTipoDescuento}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Nombre</f:facet>
+                    #{r.nombre}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Observaciones</f:facet>
+                    #{r.observaciones}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Descuento Máximo</f:facet>
+                    #{r.descuentoMaximo}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Activo</f:facet>
+                    #{r.activo ? 'Sí' : 'No'}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Acciones</f:facet>
+                    <h:commandButton value="Seleccionar"
+                                     action="#{tipoDescuentoModel.seleccionar(r.idTipoDescuento)}"
+                                     immediate="true" />
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </h:body>
+</html>

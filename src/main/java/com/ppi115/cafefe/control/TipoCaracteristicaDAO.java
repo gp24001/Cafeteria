@@ -1,22 +1,20 @@
-package com.ppi115.cafefe.boundary;
+package com.ppi115.cafefe.control;
 
-import com.ppi115.cafefe.boundary.DefaultDAO;
-import com.ppi115.cafefe.entity.TipoDescuento;
+import com.ppi115.cafefe.entity.TipoCaracteristica;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-
 @Stateless
 @LocalBean
-public class TipoDescuentoDAO extends DefaultDAO<TipoDescuento> {
+public class TipoCaracteristicaDAO extends DefaultDAO<TipoCaracteristica> {
 
     @PersistenceContext(unitName = "Cafefe-PU")
     private EntityManager em;
 
-    public TipoDescuentoDAO() {
-        super(TipoDescuento.class);
+    public TipoCaracteristicaDAO() {
+        super(TipoCaracteristica.class);
     }
 
     @Override

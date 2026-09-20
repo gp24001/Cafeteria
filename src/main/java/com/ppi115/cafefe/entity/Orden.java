@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ppi115.cafefe.entity;
 
-import com.ppi115.cafefe.UUIDConverter;
+import com.ppi115.cafefe.control.UUIDConverter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -56,9 +52,7 @@ public class Orden implements Serializable {
     @JoinColumn(name = "id_empleado_rol", referencedColumnName = "id_empleado_rol", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private EmpleadoRol idEmpleadoRol;
-    @JoinColumn(name = "id_tipo_estado_orden", referencedColumnName = "id_tipo_estado_orden", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private TipoEstadoOrden idTipoEstadoOrden;
+    
 
     public Orden() {
     }
@@ -107,14 +101,6 @@ public class Orden implements Serializable {
         this.idEmpleadoRol = idEmpleadoRol;
     }
 
-    public TipoEstadoOrden getIdTipoEstadoOrden() {
-        return idTipoEstadoOrden;
-    }
-
-    public void setIdTipoEstadoOrden(TipoEstadoOrden idTipoEstadoOrden) {
-        this.idTipoEstadoOrden = idTipoEstadoOrden;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -129,10 +115,7 @@ public class Orden implements Serializable {
             return false;
         }
         Orden other = (Orden) object;
-        if ((this.idOrden == null && other.idOrden != null) || (this.idOrden != null && !this.idOrden.equals(other.idOrden))) {
-            return false;
-        }
-        return true;
+        return !((this.idOrden == null && other.idOrden != null) || (this.idOrden != null && !this.idOrden.equals(other.idOrden)));
     }
 
     @Override

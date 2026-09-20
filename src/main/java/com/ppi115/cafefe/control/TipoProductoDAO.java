@@ -1,6 +1,5 @@
-package com.ppi115.cafefe.boundary;
+package com.ppi115.cafefe.control;
 
-import com.ppi115.cafefe.boundary.DefaultDAO;
 import com.ppi115.cafefe.entity.TipoProducto;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;

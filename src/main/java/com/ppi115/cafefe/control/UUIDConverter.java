@@ -1,5 +1,5 @@
 
-package com.ppi115.cafefe;
+package com.ppi115.cafefe.control;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

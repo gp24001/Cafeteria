@@ -1,5 +1,5 @@
 
-package com.ppi115.cafefe.boundary;
+package com.ppi115.cafefe.control;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class DefaultDAO<T> implements DAOInterface<T>{
   
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
 
     protected abstract EntityManager getEntityManager();
 
@@ -26,7 +26,6 @@ public abstract class DefaultDAO<T> implements DAOInterface<T>{
         if (entity == null) {
             throw new IllegalArgumentException("La entidad no puede ser null");
         }
-
         getEntityManager().merge(entity);
     }
 
@@ -51,52 +50,22 @@ public abstract class DefaultDAO<T> implements DAOInterface<T>{
     @Override
     public List<T> findAll() {
 
-        CriteriaQuery<T> cq
-                = getEntityManager()
-                        .getCriteriaBuilder()
-                        .createQuery(entityClass);
-
+        CriteriaQuery<T> cq = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
         cq.select(cq.from(entityClass));
-
-        return getEntityManager()
-                .createQuery(cq)
-                .getResultList();
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     @Override
     public List<T> findRange(int first, int pageSize) {
-
-        CriteriaQuery<T> cq
-                = getEntityManager()
-                        .getCriteriaBuilder()
-                        .createQuery(entityClass);
-
+        CriteriaQuery<T> cq = getEntityManager().getCriteriaBuilder().createQuery(entityClass);
         cq.select(cq.from(entityClass));
-
-        return getEntityManager()
-                .createQuery(cq)
-                .setFirstResult(first)
-                .setMaxResults(pageSize)
-                .getResultList();
+        return getEntityManager().createQuery(cq).setFirstResult(first).setMaxResults(pageSize).getResultList();
     }
 
     @Override
     public int contar() {
-
-        CriteriaQuery<Long> cq
-                = getEntityManager()
-                        .getCriteriaBuilder()
-                        .createQuery(Long.class);
-
-        cq.select(
-                getEntityManager()
-                        .getCriteriaBuilder()
-                        .count(cq.from(entityClass))
-        );
-
-        return getEntityManager()
-                .createQuery(cq)
-                .getSingleResult()
-                .intValue();
+        CriteriaQuery<Long> cq = getEntityManager().getCriteriaBuilder().createQuery(Long.class);
+        cq.select(getEntityManager().getCriteriaBuilder().count(cq.from(entityClass)));
+        return getEntityManager().createQuery(cq).getSingleResult().intValue();
     }
 }

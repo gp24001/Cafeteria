@@ -10,7 +10,6 @@ import static org.mockito.Mockito.*;
 
 import jakarta.persistence.EntityManager;
 
-import com.ppi115.cafefe.boundary.TipoDescuentoDAO;
 
 public class TipoDescuentoDAOTest {
 

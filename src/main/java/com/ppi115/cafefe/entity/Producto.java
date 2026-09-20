@@ -4,7 +4,7 @@
  */
 package com.ppi115.cafefe.entity;
 
-import com.ppi115.cafefe.UUIDConverter;
+import com.ppi115.cafefe.control.UUIDConverter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

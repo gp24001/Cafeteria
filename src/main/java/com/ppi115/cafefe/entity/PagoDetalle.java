@@ -1,10 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ppi115.cafefe.entity;
 
-import com.ppi115.cafefe.UUIDConverter;
+import com.ppi115.cafefe.control.UUIDConverter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -23,10 +19,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-/**
- *
- * @author jazmi
- */
+
 @Entity
 @Table(name = "pago_detalle", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -53,9 +46,6 @@ public class PagoDetalle implements Serializable {
     @JoinColumn(name = "id_pago", referencedColumnName = "id_pago", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Pago idPago;
-    @JoinColumn(name = "id_tipo_pago", referencedColumnName = "id_tipo_pago", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private TipoPago idTipoPago;
 
     public PagoDetalle() {
     }
@@ -102,14 +92,6 @@ public class PagoDetalle implements Serializable {
 
     public void setIdPago(Pago idPago) {
         this.idPago = idPago;
-    }
-
-    public TipoPago getIdTipoPago() {
-        return idTipoPago;
-    }
-
-    public void setIdTipoPago(TipoPago idTipoPago) {
-        this.idTipoPago = idTipoPago;
     }
 
     @Override

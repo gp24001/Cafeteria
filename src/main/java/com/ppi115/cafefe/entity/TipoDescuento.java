@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.ppi115.cafefe.entity;
 
-import com.ppi115.cafefe.UUIDConverter;
+import com.ppi115.cafefe.control.UUIDConverter;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -16,6 +13,9 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -42,11 +42,14 @@ public class TipoDescuento implements Serializable {
     private UUID idTipoDescuento;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 150)
-    @Column(name = "nombre", nullable = false, length = 150)
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(min = 3, max = 150, message = "El nombre debe tener al menos 3 caracteres")
+@Column(name = "nombre", nullable = false, length = 150)
     private String nombre;
     @Column(name = "activo")
     private Boolean activo;
+    @Min(value = 1, message = "El descuento debe ser mayor o igual a 1")
+    @Max(value = 100, message = "El descuento no puede ser mayor a 100")
     @Column(name = "descuento_maximo")
     private Integer descuentoMaximo;
     @Size(max = 2147483647)

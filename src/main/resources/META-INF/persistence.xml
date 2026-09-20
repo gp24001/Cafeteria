@@ -15,9 +15,7 @@
     <class>com.ppi115.cafefe.entity.FacturaOrdenProducto</class>
     <class>com.ppi115.cafefe.entity.PagoDetalle</class>
     <class>com.ppi115.cafefe.entity.Empleado</class>
-    <class>com.ppi115.cafefe.entity.TipoEstadoOrden</class>
     <class>com.ppi115.cafefe.entity.Caracteristica</class>
-    <class>com.ppi115.cafefe.entity.TipoPago</class>
     <class>com.ppi115.cafefe.entity.ProductoCaracteristica</class>
     <class>com.ppi115.cafefe.entity.Factura</class>
     <class>com.ppi115.cafefe.entity.Caja</class>
