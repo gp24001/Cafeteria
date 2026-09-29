@@ -5,6 +5,7 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import java.math.BigDecimal;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -47,6 +48,10 @@ public class Producto implements Serializable {
     private String nombre;
     @Basic(optional = false)
     @NotNull
+    @Column(name = "precio_sugerido", nullable = false, precision = 8, scale = 2)
+    private BigDecimal precioSugerido;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "activo", nullable = false)
     private boolean activo;
     @Size(max = 2147483647)
@@ -68,10 +73,11 @@ public class Producto implements Serializable {
         this.idProducto = idProducto;
     }
 
-    public Producto(UUID idProducto, String nombre, boolean activo) {
-        this.idProducto = idProducto;
-        this.nombre = nombre;
-        this.activo = activo;
+    public Producto(UUID idProducto, String nombre, BigDecimal precioSugerido, boolean activo) {
+    this.idProducto = idProducto;
+    this.nombre = nombre;
+    this.precioSugerido = precioSugerido;
+    this.activo = activo;
     }
 
     public UUID getIdProducto() {
@@ -96,6 +102,14 @@ public class Producto implements Serializable {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public BigDecimal getPrecioSugerido() {
+        return precioSugerido;
+    }
+
+    public void setPrecioSugerido(BigDecimal precioSugerido) {
+        this.precioSugerido = precioSugerido;
     }
 
     public String getComentarios() {
