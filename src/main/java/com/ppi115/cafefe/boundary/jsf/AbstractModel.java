@@ -5,27 +5,39 @@ import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.ActionEvent;
-import jakarta.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.FilterMeta;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 
 public abstract class AbstractModel<T> implements Serializable {
 
-    @Inject
-    DefaultDAO<T> dao;
+    private ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;
 
-    @Inject
-    FacesContext facescontext;
+    private LazyDataModel<T> model;
 
-    ESTADO_CRUD estado = ESTADO_CRUD.NINGUNO;
+    private T registro;
 
-    List<T> list;
+    private T seleccionado;
 
-    T registro;
+    private String nombreBean = "";
 
-    int primero = 0;
-    int tamanioPagina = 10;
-    int totalRegistros = 0;
+    private int primero = 0;
+
+    private int maximo = 10;
+
+    private int totalRegistros = 0;
+
+
+    // ========================================
+    // MÉTODOS QUE IMPLEMENTA CADA MODEL
+    // ========================================
+
+    public abstract DefaultDAO<T> getDao();
 
     public abstract Object getRegistrerById(Object id);
 
@@ -33,100 +45,138 @@ public abstract class AbstractModel<T> implements Serializable {
 
     public abstract T createRegistrer();
 
-    @PostConstruct
-    public void init() {
-        inicializarListas();
+
+    // ========================================
+    // INICIALIZACIÓN
+    // ========================================
+
+    @PostConstruct public void init() {
+        model = new LazyDataModel<T>() {
+            @Override
+            public int count(Map<String, FilterMeta> filterBy) {
+                return getDao().contar(filterBy);
+            }
+            @Override
+            public List<T> load(int first,int max,Map<String, SortMeta> sortBy,Map<String, FilterMeta> filterBy) {
+                primero = first;
+                maximo = max;
+                totalRegistros = getDao().contar();
+                setRowCount(totalRegistros);
+                return getDao().findRange(first, max, filterBy);
+            }
+            @Override
+            public String getRowKey(T object) {
+                return AbstractModel.this.getRowKey(object);
+            }
+            @Override
+            public T getRowData(String rowKey) {
+                return getRowDataByKey(rowKey);
+            }
+        };
         registro = createRegistrer();
-        cargarList();
     }
 
-    public void inicializarListas() {
-    }
 
-    public void cargarList() {
-        list = dao.findAll();
-        totalRegistros = dao.contar();
-    }
-
-    public void cargarRango() {
-        list = dao.findRange(primero, tamanioPagina);
-        totalRegistros = dao.contar();
-    }
-
-    public void findRange(int first, int max) {
-        this.primero = first;
-        this.tamanioPagina = max;
-        cargarRango();
-    }
+    // ========================================
+    // CRUD
+    // ========================================
 
     public void nuevo() {
         registro = createRegistrer();
         estado = ESTADO_CRUD.NUEVO;
     }
 
+
     public void guardar() {
         if (registro == null) {
-            facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "El registro no puede ser nulo", null));
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,"El registro no puede ser nulo",null));
             return;
         }
         try {
             if (estado == ESTADO_CRUD.EDITAR) {
-                dao.modificar(registro);
-                facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó el registro", null));
+                getDao().modificar(registro);
+                getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Se modificó el registro",null));
             } else {
-                dao.crear(registro);
-                facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Se registró el registro", null));
+                getDao().crear(registro);
+                getFacesContext().addMessage(
+                        null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,"Se creó el registro",null));
             }
             registro = createRegistrer();
             estado = ESTADO_CRUD.NINGUNO;
-            cargarList();
+            seleccionado = null;
+            if (model != null) {
+                model.setRowCount(getDao().contar());
+            }
         } catch (IllegalArgumentException e) {
-            facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al guardar: " + e.getMessage(), null));
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error al guardar: "+ e.getMessage(),null));
+        } catch (Exception e) {
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Ocurrió un error inesperado al guardar",null));
         }
     }
 
+
     public void editar(T object) {
         if (object == null) {
-            facescontext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar un registro para editar", null));
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,"Debe seleccionar un registro para editar",null ));
             return;
         }
-        this.registro = object;
+        registro = object;
+        seleccionado = object;
         estado = ESTADO_CRUD.EDITAR;
     }
 
     public void eliminar(T object) {
         if (object == null) {
-            facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar un registro para eliminar", null));
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,"Debe seleccionar un registro para eliminar",null));
+            return;
+        }
+        Object id = getIdByRegistrer(object);
+        if (id == null) {
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,"El registro no tiene ID",null));
             return;
         }
         try {
-            Object id = getIdByRegistrer(object);
-            if (id == null) {
-                facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "El registro no tiene ID", null));
-                return;
+            getDao().eliminar(id);
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO,"Se eliminó el registro",null));
+            registro = createRegistrer();
+            estado = ESTADO_CRUD.NINGUNO;
+            seleccionado = null;
+            if (model != null) {
+                model.setRowCount(getDao().contar());
             }
-            dao.eliminar(id);
-            facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Se eliminó el registro", null));
-            cargarList();
         } catch (IllegalArgumentException e) {
-            facescontext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error al eliminar: " + e.getMessage(), null));
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error al eliminar: "+ e.getMessage(),null));
+        } catch (Exception e) {
+            getFacesContext().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,"Ocurrió un error inesperado al eliminar",null));
         }
     }
 
-    
-    
-    public void seleccionar(Object id) {
-    this.registro = list.stream().filter(r -> getIdByRegistrer(r).equals(id)).findFirst() .orElse(null);
-    estado = ESTADO_CRUD.EDITAR;
-}
-    
-    
-    
     public void cancelar() {
         registro = createRegistrer();
         estado = ESTADO_CRUD.NINGUNO;
+        seleccionado = null;
     }
 
+
+    // ========================================
+    // SELECCIÓN
+    // ========================================
+
+    public void seleccionar(SelectEvent<T> event) {
+        if (event == null
+                || event.getObject() == null) {
+            return;
+        }
+        seleccionado = event.getObject();
+        registro = event.getObject();
+        estado = ESTADO_CRUD.EDITAR;
+    }
+
+
+    // ========================================
+    // BOTONES
+    // ========================================
     public void btnNuevo(ActionEvent event) {
         nuevo();
     }
@@ -135,37 +185,57 @@ public abstract class AbstractModel<T> implements Serializable {
         guardar();
     }
 
+    public void btnEliminar(ActionEvent event) {
+        eliminar(registro);
+    }
+
     public void btnCancelar(ActionEvent event) {
         cancelar();
     }
 
-    public Object getRowKey(T object) {
-        return getIdByRegistrer(object);
+    // ========================================
+    // ROW KEY
+    // ========================================
+
+    public String getRowKey(T object) {
+        if (object == null) {
+            return null;
+        }
+        Object id =getIdByRegistrer(object);
+        return id != null? id.toString(): null;
     }
 
+
+    protected T getRowDataByKey(String rowKey) {
+        if (rowKey == null|| rowKey.isBlank()) {
+            return null;
+        }
+        try {
+            UUID id = UUID.fromString(rowKey);
+            return byIdRegistrer(id);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+
+    @SuppressWarnings("unchecked")
     public T byIdRegistrer(Object id) {
-        return (T) getRegistrerById(id);
+        if (id == null) {
+            return null;
+        }
+        return (T)getRegistrerById(id);
     }
 
-    
-    
-    // Getters y Setters
 
-    public DefaultDAO<T> getDao() {
-        return dao;
+    private FacesContext getFacesContext() {
+        return FacesContext.getCurrentInstance();
     }
 
-    public void setDao(DefaultDAO<T> dao) {
-        this.dao = dao;
-    }
 
-    public FacesContext getFacescontext() {
-        return facescontext;
-    }
-
-    public void setFacescontext(FacesContext facescontext) {
-        this.facescontext = facescontext;
-    }
+    // ========================================
+    // GETTERS Y SETTERS
+    // ========================================
 
     public ESTADO_CRUD getEstado() {
         return estado;
@@ -175,12 +245,12 @@ public abstract class AbstractModel<T> implements Serializable {
         this.estado = estado;
     }
 
-    public List<T> getList() {
-        return list;
+    public LazyDataModel<T> getModel() {
+        return model;
     }
 
-    public void setList(List<T> list) {
-        this.list = list;
+    public void setModel(LazyDataModel<T> model) {
+        this.model = model;
     }
 
     public T getRegistro() {
@@ -191,6 +261,22 @@ public abstract class AbstractModel<T> implements Serializable {
         this.registro = registro;
     }
 
+    public T getSeleccionado() {
+        return seleccionado;
+    }
+
+    public void setSeleccionado(T seleccionado) {
+        this.seleccionado = seleccionado;
+    }
+
+    public String getNombreBean() {
+        return nombreBean;
+    }
+
+    public void setNombreBean(String nombreBean) {
+        this.nombreBean = nombreBean;
+    }
+
     public int getPrimero() {
         return primero;
     }
@@ -199,12 +285,12 @@ public abstract class AbstractModel<T> implements Serializable {
         this.primero = primero;
     }
 
-    public int getTamanioPagina() {
-        return tamanioPagina;
+    public int getMaximo() {
+        return maximo;
     }
 
-    public void setTamanioPagina(int tamanioPagina) {
-        this.tamanioPagina = tamanioPagina;
+    public void setMaximo(int maximo) {
+        this.maximo = maximo;
     }
 
     public int getTotalRegistros() {
@@ -215,7 +301,5 @@ public abstract class AbstractModel<T> implements Serializable {
         this.totalRegistros = totalRegistros;
     }
 
-    
-    
     
 }

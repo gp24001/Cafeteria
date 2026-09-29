@@ -9,7 +9,7 @@
     template="/WEB-INF/templates/general.xhtml">
  
     <ui:param
-        name="modelo" value="#{tipoDescuentoModel}"/>
+        name="modelo" value="#{empleadoModel}"/>
 
     <ui:define name="contenido">
 
@@ -26,10 +26,15 @@
                 <h2 class="crud-subtitulo"> Datos del #{modelo.nombreBean} </h2>
 
                 <div class="formGrid">
-                    
+
                     <div class="campoGrupo">
                         <p:outputLabel for="nombre" value="Nombre:"/>
                         <p:inputText id="nombre" value="#{modelo.registro.nombre}" styleClass="inputCompleto"/>
+                    </div>
+
+                    <div class="campoGrupo">
+                        <p:outputLabel for="apellido" value="Apellido:"/>
+                        <p:inputText id="apellido" value="#{modelo.registro.apellido}" styleClass="inputCompleto"/>
                     </div>
 
                     <div class="campoGrupo">
@@ -38,50 +43,41 @@
                     </div>
 
                     <div class="campoGrupo">
-                        <p:outputLabel for="descuentoMaximo" value="Descuento Máximo:"/>
-                        <p:inputText id="descuentoMaximo" value="#{modelo.registro.descuentoMaximo}" styleClass="inputCompleto"/>
-                    </div>
-
-                    <div class="campoGrupo">                     
-                        <p:outputLabel for="activo" value="Activo:"/>   
-                        
-                        <div class="checkboxContenedor">                            
+                        <p:outputLabel for="activo" value="Activo:"/>
+                        <div class="checkboxContenedor">
                             <p:selectBooleanCheckbox id="activo" value="#{modelo.registro.activo}"/>
                         </div>
-                        
                     </div>
-                    
+
                 </div>
             </h:panelGroup>
-
+            
             <div class="tablaAcciones">
-                <p:button value="Descuento" outcome="Descuento" styleClass="botonFlat"/>
-            </div>
+    <p:button value="Empleado Rol" outcome="EmpleadoRol" styleClass="botonFlat"/>
+    <p:button value="Roles" outcome="Rol" styleClass="botonFlat"/>
+</div>
 
             <div class="tablaContenedor">
                 <ta:tablaGeneral modelo="#{modelo}" filas="5" opcionesFilas="2,5,10,20">
 
                     <p:column headerText="Nombre" field="nombre" filterBy="#{r.nombre}"
-                        filterMatchMode="contains" filterPlaceholder="Buscar por nombre">                      
+                        filterMatchMode="contains" filterPlaceholder="Buscar por nombre">
                         <h:outputText value="#{r.nombre}"/>
                     </p:column>
 
-                    <p:column
-                        headerText="Descuento Máximo" filterable="false">
-                        <h:outputText value="#{r.descuentoMaximo}"/>
+                    <p:column headerText="Apellido" filterable="false">
+                        <h:outputText value="#{r.apellido}"/>
                     </p:column>
 
-                    <p:column
-                        headerText="Observaciones" filterable="false">
+                    <p:column headerText="Observaciones" filterable="false">
                         <h:outputText value="#{r.observaciones}"/>
                     </p:column>
-                    
-                    <p:column
-                        headerText="Activo" filterable="false">
+
+                    <p:column headerText="Activo" filterable="false">
                         <h:outputText value="#{r.activo ? 'Sí' : 'No'}"/>
                     </p:column>
-                </ta:tablaGeneral>
 
+                </ta:tablaGeneral>
             </div>
 
         </h:form>

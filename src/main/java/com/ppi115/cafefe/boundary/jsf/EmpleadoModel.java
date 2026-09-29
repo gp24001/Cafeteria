@@ -1,29 +1,29 @@
 package com.ppi115.cafefe.boundary.jsf;
 
-import com.ppi115.cafefe.control.TipoProductoDAO;
-import com.ppi115.cafefe.entity.TipoProducto;
+import com.ppi115.cafefe.control.EmpleadoDAO;
+import com.ppi115.cafefe.entity.Empleado;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Named("tipoProductoModel")
+@Named("empleadoModel")
 @ViewScoped
-public class TipoProductoModel extends AbstractModel<TipoProducto> implements Serializable {
+public class EmpleadoModel extends AbstractModel<Empleado> implements Serializable {
 
     @Inject
-    private TipoProductoDAO dao;
+    private EmpleadoDAO dao;
 
     @Override
-    public TipoProductoDAO getDao() {
+    public EmpleadoDAO getDao() {
         return dao;
     }
 
     @Override
-    public TipoProducto createRegistrer() {
-        TipoProducto r = new TipoProducto();
-        r.setIdTipoProducto(UUID.randomUUID());
+    public Empleado createRegistrer() {
+        Empleado r = new Empleado();
+        r.setIdEmpleado(UUID.randomUUID());
         r.setActivo(true);
         return r;
     }
@@ -37,15 +37,15 @@ public class TipoProductoModel extends AbstractModel<TipoProducto> implements Se
     }
 
     @Override
-    public Object getIdByRegistrer(TipoProducto registro) {
+    public Object getIdByRegistrer(Empleado registro) {
         if (registro == null) {
             return null;
         }
-        return registro.getIdTipoProducto();
+        return registro.getIdEmpleado();
     }
 
     @Override
     public String getNombreBean() {
-        return "Tipo de Producto";
+        return "Empleado";
     }
 }

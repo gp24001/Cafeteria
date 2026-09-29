@@ -9,7 +9,7 @@
     template="/WEB-INF/templates/general.xhtml">
  
     <ui:param
-        name="modelo" value="#{tipoDescuentoModel}"/>
+        name="modelo" value="#{tipoProductoModel}"/>
 
     <ui:define name="contenido">
 
@@ -37,11 +37,6 @@
                         <p:inputText id="observaciones" value="#{modelo.registro.observaciones}" styleClass="inputCompleto"/>
                     </div>
 
-                    <div class="campoGrupo">
-                        <p:outputLabel for="descuentoMaximo" value="Descuento Máximo:"/>
-                        <p:inputText id="descuentoMaximo" value="#{modelo.registro.descuentoMaximo}" styleClass="inputCompleto"/>
-                    </div>
-
                     <div class="campoGrupo">                     
                         <p:outputLabel for="activo" value="Activo:"/>   
                         
@@ -53,9 +48,10 @@
                     
                 </div>
             </h:panelGroup>
-
+            
             <div class="tablaAcciones">
-                <p:button value="Descuento" outcome="Descuento" styleClass="botonFlat"/>
+                <p:button value="Productos" outcome="Producto" styleClass="botonFlat"/>
+                <p:button value="Producto Tipo Producto" outcome="ProductoTipoProducto" styleClass="botonFlat"/>
             </div>
 
             <div class="tablaContenedor">
@@ -66,22 +62,15 @@
                         <h:outputText value="#{r.nombre}"/>
                     </p:column>
 
-                    <p:column
-                        headerText="Descuento Máximo" filterable="false">
-                        <h:outputText value="#{r.descuentoMaximo}"/>
-                    </p:column>
-
-                    <p:column
-                        headerText="Observaciones" filterable="false">
+                    <p:column headerText="Observaciones" filterable="false">
                         <h:outputText value="#{r.observaciones}"/>
                     </p:column>
                     
-                    <p:column
-                        headerText="Activo" filterable="false">
+                    <p:column headerText="Activo" filterable="false">
                         <h:outputText value="#{r.activo ? 'Sí' : 'No'}"/>
                     </p:column>
-                </ta:tablaGeneral>
 
+                </ta:tablaGeneral>
             </div>
 
         </h:form>

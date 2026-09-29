@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="primefaces">
+
+    <h:head>
+        <title>CAFEFE</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/general.css"/>
+    </h:head>
+
+    <h:body>
+        <div class="general">
+            <!-- ENCABEZADO -->
+            <div class="encabezado">
+                <!-- LOGO Y NOMBRE -->
+                <div class="aplicacion">
+                    <h:graphicImage library="imagenes" name="logo.jpg" styleClass="logo"/>
+                    <h1>CAFEFE</h1>
+                </div>
+                <!-- CATALOGO -->
+                <div class="catalogo">
+                    <h:form id="formMenu">
+                        <p:menuButton id="menuCatalogo" value="Catálogo"  >
+                            
+                            <p:menuitem value="Empleado" url="Empleado.jsf"/>
+                            <p:menuitem value="Rol" url="Rol.jsf"/>
+                            
+
+                            <p:menuitem value="Caracteristica" url="Caracteristica.jsf"/>
+                            <p:menuitem value="Producto" url="Producto.jsf"/>
+                            <p:menuitem value="Descuento" url="Descuento.jsf"/>
+
+                            <p:menuitem value="Caja" url="Caja.jsf"/>
+                            <p:menuitem value="Orden" url="Orden.jsf"/>
+                           
+                            <p:menuitem value="Factura" url="Factura.jsf"/>
+                          
+                            <p:menuitem value="Pago" url="Pago.jsf"/>
+
+                        </p:menuButton>
+                    </h:form>
+                </div>
+            </div>
+            <!-- CONTENIDO -->
+            <div class="contenido">
+                <div class="panel">
+                    <ui:insert name="contenido"/>
+                </div>
+            </div>
+
+        </div>
+
+    </h:body>
+
+</html>

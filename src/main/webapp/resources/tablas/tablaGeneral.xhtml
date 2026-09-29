@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:p="primefaces">
+
+<cc:interface>
+    <cc:attribute name="modelo" type="com.ppi115.cafefe.boundary.jsf.AbstractModel" required="true"/>
+    <cc:attribute name="filas" type="java.lang.Integer" required="false" default="5"/>
+    <cc:attribute name="opcionesFilas" required="false" default="2,5,10,20"/>
+    <cc:attribute name="actualizar" required="false" default="@form"/>
+</cc:interface>
+
+<cc:implementation>
+
+    <p:dataTable id="tabla" var="r" value="#{cc.attrs.modelo.model}" lazy="true"
+        paginator="true" rows="#{cc.attrs.filas}" rowsPerPageTemplate="#{cc.attrs.opcionesFilas}"
+
+        paginatorTemplate="
+            {RowsPerPageDropdown}
+            {FirstPageLink}
+            {PreviousPageLink}
+            {PageLinks}
+            {NextPageLink}
+            {LastPageLink}"
+
+        paginatorPosition="bottom"
+        emptyMessage="No se encontraron registros"
+        selectionMode="single"
+        selection="#{cc.attrs.modelo.seleccionado}"
+        rowKey="#{cc.attrs.modelo.getRowKey(r)}"
+        styleClass="tablaGeneral">
+        <cc:insertChildren/>
+        <p:ajax event="rowSelect" listener="#{cc.attrs.modelo.seleccionar}" update="#{cc.attrs.actualizar}"/>
+    </p:dataTable>
+
+</cc:implementation>
+
+</html>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="jakarta.faces.composite"
+      xmlns:p="primefaces">
+
+<cc:interface>
+
+    <cc:attribute
+        name="modelo"
+        type="com.ppi115.cafefe.boundary.jsf.AbstractModel"
+        required="true"/>
+
+    <cc:attribute
+        name="actualizar"
+        required="false"
+        default="@form"/>
+
+</cc:interface>
+
+
+<cc:implementation>
+
+    <div class="botonesCrud">
+
+        <!-- NUEVO -->
+
+        <p:commandButton
+            value="Nuevo #{cc.attrs.modelo.nombreBean}"
+            actionListener="#{cc.attrs.modelo.btnNuevo}"
+            process="@this"
+            update="#{cc.attrs.actualizar}"
+            rendered="#{cc.attrs.modelo.estado == 'NINGUNO'}"/>
+
+
+        <!-- GUARDAR -->
+
+        <p:commandButton
+            value="Guardar"
+            actionListener="#{cc.attrs.modelo.btnGuardar}"
+            process="@form"
+            update="#{cc.attrs.actualizar}"
+            rendered="#{cc.attrs.modelo.estado != 'NINGUNO'}"/>
+
+
+        <!-- CANCELAR -->
+
+        <p:commandButton
+            value="Cancelar"
+            actionListener="#{cc.attrs.modelo.btnCancelar}"
+            process="@this"
+            update="#{cc.attrs.actualizar}"
+            immediate="true"
+            resetValues="true"
+            rendered="#{cc.attrs.modelo.estado != 'NINGUNO'}"/>
+
+
+        <!-- ELIMINAR -->
+
+        <p:commandButton
+            value="Eliminar"
+            actionListener="#{cc.attrs.modelo.btnEliminar}"
+            process="@this"
+            update="#{cc.attrs.actualizar}"/>
+
+    </div>
+
+</cc:implementation>
+
+</html>

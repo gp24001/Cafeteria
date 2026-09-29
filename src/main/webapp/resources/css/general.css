@@ -1,0 +1,368 @@
+* {
+    box-sizing: border-box;
+}
+
+/* PAGINA */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4ebe3;
+    color: #3e2723;
+}
+
+/* ESTRUCTURA GENERAL */
+.general {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 1fr;
+    min-height: 100vh;
+}
+
+/* ENCABEZADO */
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    background: linear-gradient(90deg, #4e342e, #6d4c41);
+    border-bottom: 4px solid #bcaaa4;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* LOGO Y NOMBRE */
+.aplicacion {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    border-radius: 0;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+}
+
+.aplicacion h1 {
+    margin: 0;
+    color: white;
+    font-size: 28px;
+    letter-spacing: 1px;
+}
+
+/* CATALOGO */
+.catalogo {
+    display: flex;
+    align-items: center;
+}
+
+.catalogo .ui-menubutton .ui-button {
+    background-color: #8d6e63 !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 8px 14px !important;
+}
+
+.catalogo .ui-menubutton .ui-button:hover {
+    background-color: #a1887f !important;
+}
+
+/* SCROLL DEL CATALOGO */
+.menuCatalogoScroll {
+    max-height: 400px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/* MENU DESPLEGABLE */
+.ui-menu {
+    background-color: #fffaf5 !important;
+    border: 1px solid #d7ccc8 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+
+/* CONTENIDO */
+.contenido {
+    padding: 20px;
+    background-color: #f4ebe3;
+}
+
+/* PANEL PRINCIPAL */
+.panel {
+    min-height: calc(100vh - 120px);
+    padding: 24px;
+    background-color: #fffaf5;
+    border: 1px solid #d7ccc8;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* FORMULARIO */
+.formularioBloque {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding: 24px;
+    background-color: #f8efe7;
+    border: 1px solid #d7ccc8;
+    border-radius: 12px;
+}
+
+/* TITULO DEL FORMULARIO */
+.crud-subtitulo {
+    margin-top: 0;
+    margin-bottom: 22px;
+    color: #4e342e;
+}
+
+/* GRID DEL FORMULARIO */
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+    column-gap: 35px;
+    row-gap: 24px;
+}
+
+/* CADA CAMPO */
+.campoGrupo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* LABELS */
+.campoGrupo label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4e342e;
+}
+
+/* INPUT COMPLETO */
+.inputCompleto {
+    width: 100%;
+}
+
+/* CHECKBOX */
+.checkboxContenedor {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+}
+
+/* OCULTAR REQUIRED */
+.ui-outputlabel-rfi {
+    display: none !important;
+}
+
+/* PANEL GRID */
+.ui-panelgrid {
+    background-color: #f3e8de !important;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+    background-color: #fffaf5 !important;
+    color: #3e2723 !important;
+    border-color: #e0d2c8 !important;
+}
+
+/* INPUTS */
+.ui-inputfield {
+    min-height: 42px;
+    padding: 8px 10px !important;
+    border: 1px solid #bcaaa4 !important;
+    border-radius: 7px !important;
+    box-shadow: none !important;
+    font-size: 15px;
+}
+
+.ui-inputfield:focus {
+    border-color: #6d4c41 !important;
+    box-shadow: 0 0 0 1px #6d4c41 !important;
+}
+
+/* INPUT NUMBER */
+.ui-inputnumber input {
+    min-height: 42px;
+}
+
+/* SELECT */
+.ui-selectonemenu {
+    min-height: 42px;
+    border: 1px solid #bcaaa4 !important;
+    border-radius: 7px !important;
+}
+
+/* CHECKBOX */
+.ui-chkbox {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+/* TABLA */
+.tablaContenedor {
+    margin-top: 30px;
+}
+
+.ui-datatable {
+    width: 100%;
+    margin-top: 25px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #d7ccc8 !important;
+}
+
+.ui-datatable .ui-datatable-header {
+    background-color: #6d4c41 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.ui-datatable thead th {
+    background-color: #a1887f !important;
+    color: white !important;
+    border: none !important;
+    padding: 14px !important;
+}
+
+.ui-datatable tbody tr:nth-child(odd) {
+    background-color: #fffaf5 !important;
+}
+
+.ui-datatable tbody tr:nth-child(even) {
+    background-color: #f6eee8 !important;
+}
+
+.ui-datatable tbody td {
+    color: #3e2723 !important;
+    border-color: #e2d5cb !important;
+    padding: 14px !important;
+}
+
+/* ACCIONES ARRIBA DE TABLA */
+.tablaAcciones {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: -10px;
+}
+
+/* PAGINADOR */
+.ui-paginator {
+    background-color: #fffaf5 !important;
+    border: none !important;
+    padding: 15px !important;
+}
+
+.ui-paginator .ui-paginator-page.ui-state-active {
+    background-color: #6d4c41 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 7px !important;
+}
+
+
+.ui-button {
+    background-color: #6d4c41 !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 9px 14px !important;
+}
+
+.ui-button:hover {
+    background-color: #4e342e !important;
+}
+
+
+.tablaAcciones .ui-button.botonFlat {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #6d4c41 !important;
+    padding: 7px 10px !important;
+    border-radius: 5px !important;
+}
+
+.tablaAcciones .ui-button.botonFlat:hover {
+    background: #f0e3d8 !important;
+    background-color: #f0e3d8 !important;
+    color: #4e342e !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* TEXTO INTERNO DEL BOTON */
+.tablaAcciones .botonFlat .ui-button-text {
+    color: #6d4c41 !important;
+}
+
+.tablaAcciones .botonFlat:hover .ui-button-text {
+    color: #4e342e !important;
+}
+
+/* TITULOS */
+h2,
+h3 {
+    color: #4e342e;
+}
+
+/* PANTALLAS PEQUEÑAS */
+@media (max-width: 700px) {
+    .encabezado {
+        padding: 10px 15px;
+    }
+
+    .logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .aplicacion h1 {
+        font-size: 22px;
+    }
+
+    .contenido {
+        padding: 10px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+
+    .formGrid {
+        grid-template-columns: 1fr;
+        row-gap: 18px;
+    }
+
+    .formularioBloque {
+        padding: 16px;
+    }
+
+    .tablaAcciones {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        margin-bottom: 0;
+    }
+
+    
+    /* TOTAL DE ORDEN */
+.totalOrden {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-top: 18px;
+    padding: 15px;
+    font-size: 20px;
+    color: #4e342e;
+    background-color: #f8efe7;
+    border-radius: 8px;
+}
+}

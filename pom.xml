@@ -28,6 +28,7 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.13</version>
+             <scope>provided</scope> 
         </dependency>
         <!-- JUnit 5 para Pruebas de Unidad -->
         <dependency>
@@ -35,6 +36,7 @@
             <artifactId>junit-jupiter</artifactId>
             <version>5.13.0-M3</version>
             <type>jar</type>
+            <scope>test</scope>
         </dependency>
         <!-- Mockito para Mocks y Stubs -->
         <dependency>
@@ -42,6 +44,15 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>5.23.0</version>
             <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        <!--PrimeFaces-->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>15.0.17</version>
+            <scope>provided</scope>
+            <classifier>jakarta</classifier>
         </dependency>
            
     </dependencies>

@@ -17,6 +17,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
@@ -42,9 +43,13 @@ public class Empleado implements Serializable {
     private UUID idEmpleado;
     @Size(max = 200)
     @Column(name = "nombre", length = 200)
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+$",
+    message = "El nombre solo puede contener letras y espacios")
     private String nombre;
     @Size(max = 200)
     @Column(name = "apellido", length = 200)
+    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñÜü ]+$",
+    message = "El apellido solo puede contener letras y espacios")
     private String apellido;
     @Column(name = "activo")
     private Boolean activo;

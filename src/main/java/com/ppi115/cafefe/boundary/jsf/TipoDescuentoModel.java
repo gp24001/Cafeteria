@@ -6,7 +6,6 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 @Named("tipoDescuentoModel")
@@ -14,16 +13,11 @@ import java.util.UUID;
 public class TipoDescuentoModel extends AbstractModel<TipoDescuento> implements Serializable {
 
     @Inject
-    TipoDescuentoDAO dao;
+    private TipoDescuentoDAO dao;
 
     @Override
-    public Object getRegistrerById(Object id) {
-        return dao.findById(id);
-    }
-
-    @Override
-    public Object getIdByRegistrer(TipoDescuento object) {
-        return object.getIdTipoDescuento();
+    public TipoDescuentoDAO getDao() {
+        return dao;
     }
 
     @Override
@@ -36,62 +30,23 @@ public class TipoDescuentoModel extends AbstractModel<TipoDescuento> implements 
     }
 
     @Override
-    public List<TipoDescuento> getList() {
-        return list;
+    public Object getRegistrerById(Object id) {
+        if (id == null) {
+            return null;
+        }
+        return dao.findById(id);
     }
 
     @Override
-    public void setList(List<TipoDescuento> list) {
-        this.list = list;
+    public Object getIdByRegistrer(TipoDescuento registro) {
+        if (registro == null) {
+            return null;
+        }
+        return registro.getIdTipoDescuento();
     }
 
     @Override
-    public TipoDescuento getRegistro() {
-        return registro;
-    }
-
-    @Override
-    public void setRegistro(TipoDescuento registro) {
-        this.registro = registro;
-    }
-
-    @Override
-    public ESTADO_CRUD getEstado() {
-        return estado;
-    }
-
-    @Override
-    public void setEstado(ESTADO_CRUD estado) {
-        this.estado = estado;
-    }
-
-    @Override
-    public int getPrimero() {
-        return primero;
-    }
-
-    @Override
-    public void setPrimero(int primero) {
-        this.primero = primero;
-    }
-
-    @Override
-    public int getTamanioPagina() {
-        return tamanioPagina;
-    }
-
-    @Override
-    public void setTamanioPagina(int tamanioPagina) {
-        this.tamanioPagina = tamanioPagina;
-    }
-
-    @Override
-    public int getTotalRegistros() {
-        return totalRegistros;
-    }
-
-    @Override
-    public void setTotalRegistros(int totalRegistros) {
-        this.totalRegistros = totalRegistros;
+    public String getNombreBean() {
+        return "Tipo de Descuento";
     }
 }

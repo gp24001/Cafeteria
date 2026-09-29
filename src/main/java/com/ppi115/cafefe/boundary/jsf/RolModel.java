@@ -1,29 +1,29 @@
 package com.ppi115.cafefe.boundary.jsf;
 
-import com.ppi115.cafefe.control.TipoProductoDAO;
-import com.ppi115.cafefe.entity.TipoProducto;
+import com.ppi115.cafefe.control.RolDAO;
+import com.ppi115.cafefe.entity.Rol;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Named("tipoProductoModel")
+@Named("rolModel")
 @ViewScoped
-public class TipoProductoModel extends AbstractModel<TipoProducto> implements Serializable {
+public class RolModel extends AbstractModel<Rol> implements Serializable {
 
     @Inject
-    private TipoProductoDAO dao;
+    private RolDAO dao;
 
     @Override
-    public TipoProductoDAO getDao() {
+    public RolDAO getDao() {
         return dao;
     }
 
     @Override
-    public TipoProducto createRegistrer() {
-        TipoProducto r = new TipoProducto();
-        r.setIdTipoProducto(UUID.randomUUID());
+    public Rol createRegistrer() {
+        Rol r = new Rol();
+        r.setIdRol(UUID.randomUUID());
         r.setActivo(true);
         return r;
     }
@@ -37,15 +37,15 @@ public class TipoProductoModel extends AbstractModel<TipoProducto> implements Se
     }
 
     @Override
-    public Object getIdByRegistrer(TipoProducto registro) {
+    public Object getIdByRegistrer(Rol registro) {
         if (registro == null) {
             return null;
         }
-        return registro.getIdTipoProducto();
+        return registro.getIdRol();
     }
 
     @Override
     public String getNombreBean() {
-        return "Tipo de Producto";
+        return "Rol";
     }
 }
