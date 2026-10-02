@@ -5,6 +5,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
 
 @Stateless
 @LocalBean
@@ -21,4 +22,10 @@ public class RolDAO extends DefaultDAO<Rol> {
     protected EntityManager getEntityManager() {
         return em;
     }
+    
+    public List<Rol> findActivos() {
+    return getEntityManager().createQuery(
+        "SELECT r FROM Rol r WHERE r.activo = true ORDER BY r.nombre",Rol.class)
+            .getResultList();
+}
 }

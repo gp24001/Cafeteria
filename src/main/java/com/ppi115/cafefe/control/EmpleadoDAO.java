@@ -5,6 +5,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
 
 @Stateless
 @LocalBean
@@ -21,4 +22,10 @@ public class EmpleadoDAO extends DefaultDAO<Empleado> {
     protected EntityManager getEntityManager() {
         return em;
     }
+    
+    public List<Empleado> findActivos() {
+    return getEntityManager().createQuery(
+        "SELECT e FROM Empleado e WHERE e.activo = true ORDER BY e.nombre",Empleado.class)
+            .getResultList();
+}
 }

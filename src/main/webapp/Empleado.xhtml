@@ -2,83 +2,279 @@
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
     xmlns:ui="jakarta.faces.facelets"
     xmlns:p="primefaces"
     xmlns:bo="jakarta.faces.composite/botones"
     xmlns:ta="jakarta.faces.composite/tablas"
     template="/WEB-INF/templates/general.xhtml">
- 
-    <ui:param
-        name="modelo" value="#{empleadoModel}"/>
+
+    <ui:param name="modelo" value="#{empleadoModel}"/>
+    <ui:param name="tituloPagina" value="Empleado"/>
 
     <ui:define name="contenido">
 
-        <h:form id="formTabla">
+        <h:form id="formEmpleado">
 
-            <p:growl id="growl" showDetail="true" life="5000"/>
+            <p:growl id="growl" showDetail="false" life="5000"/>
 
-            <div class="crud-botones">
-                <bo:botonesArriba modelo="#{modelo}"/>
-            </div>
+            <p:tabView id="tabsEmpleado"
+                activeIndex="#{modelo.pestanaActiva}">
 
-            <h:panelGroup id="panelFormulario" layout="block" rendered="#{modelo.estado != 'NINGUNO'}" styleClass="formularioBloque">
+                <!-- GENERALIDADES -->
+                <p:tab title="Generalidades">
 
-                <h2 class="crud-subtitulo"> Datos del #{modelo.nombreBean} </h2>
-
-                <div class="formGrid">
-
-                    <div class="campoGrupo">
-                        <p:outputLabel for="nombre" value="Nombre:"/>
-                        <p:inputText id="nombre" value="#{modelo.registro.nombre}" styleClass="inputCompleto"/>
+                    <div class="crud-botones">
+                        <bo:botonesArriba
+                            modelo="#{modelo}"
+                            actualizar="@form"/>
                     </div>
 
-                    <div class="campoGrupo">
-                        <p:outputLabel for="apellido" value="Apellido:"/>
-                        <p:inputText id="apellido" value="#{modelo.registro.apellido}" styleClass="inputCompleto"/>
-                    </div>
+                    <!-- FORMULARIO EMPLEADO -->
+                    <h:panelGroup id="panelEmpleado"
+                        layout="block"
+                        rendered="#{modelo.estado != 'NINGUNO'}"
+                        styleClass="formularioBloque">
 
-                    <div class="campoGrupo">
-                        <p:outputLabel for="observaciones" value="Observaciones:"/>
-                        <p:inputText id="observaciones" value="#{modelo.registro.observaciones}" styleClass="inputCompleto"/>
-                    </div>
+                        <h2 class="crud-subtitulo">Datos del Empleado</h2>
 
-                    <div class="campoGrupo">
-                        <p:outputLabel for="activo" value="Activo:"/>
-                        <div class="checkboxContenedor">
-                            <p:selectBooleanCheckbox id="activo" value="#{modelo.registro.activo}"/>
+                        <div class="formGrid">
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="nombre" value="Nombre:"/>
+
+                                <p:inputText id="nombre"
+                                    value="#{modelo.registro.nombre}"
+                                    required="true"
+                                    requiredMessage="El nombre es obligatorio"
+                                    validatorMessage="El nombre solo puede contener letras y espacios"
+                                    maxlength="200"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="apellido" value="Apellido:"/>
+
+                                <p:inputText id="apellido"
+                                    value="#{modelo.registro.apellido}"
+                                    required="true"
+                                    requiredMessage="El apellido es obligatorio"
+                                    validatorMessage="El apellido solo puede contener letras y espacios"
+                                    maxlength="200"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="observaciones" value="Observaciones:"/>
+
+                                <p:inputText id="observaciones"
+                                    value="#{modelo.registro.observaciones}"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="activoEmpleado"
+                                    value="Activo:"/>
+
+                                <div class="checkboxContenedor">
+                                    <p:selectBooleanCheckbox
+                                        id="activoEmpleado"
+                                        value="#{modelo.registro.activo}"/>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
 
-                </div>
-            </h:panelGroup>
-            
-            <div class="tablaAcciones">
-    <p:button value="Empleado Rol" outcome="EmpleadoRol" styleClass="botonFlat"/>
-    <p:button value="Roles" outcome="Rol" styleClass="botonFlat"/>
-</div>
+                    </h:panelGroup>
 
-            <div class="tablaContenedor">
-                <ta:tablaGeneral modelo="#{modelo}" filas="5" opcionesFilas="2,5,10,20">
+                    <!-- TABLA EMPLEADOS -->
+                    <h:panelGroup id="tablaEmpleados" layout="block" rendered="#{modelo.estado == 'NINGUNO'}" styleClass="tablaContenedor">
 
-                    <p:column headerText="Nombre" field="nombre" filterBy="#{r.nombre}"
-                        filterMatchMode="contains" filterPlaceholder="Buscar por nombre">
-                        <h:outputText value="#{r.nombre}"/>
-                    </p:column>
+                        <ta:tablaGeneral
+                            modelo="#{modelo}"
+                            filas="5"
+                            opcionesFilas="2,5,10,20"
+                            actualizar="@form">
 
-                    <p:column headerText="Apellido" filterable="false">
-                        <h:outputText value="#{r.apellido}"/>
-                    </p:column>
+                            <p:column headerText="ID" filterable="false">
+                                <h:outputText value="#{r.idEmpleado}"/>
+                            </p:column>
 
-                    <p:column headerText="Observaciones" filterable="false">
-                        <h:outputText value="#{r.observaciones}"/>
-                    </p:column>
+                            <p:column headerText="Nombre"
+                                field="nombre"
+                                filterBy="#{r.nombre}"
+                                filterMatchMode="contains"
+                                filterPlaceholder="Buscar por nombre">
+                                <h:outputText value="#{r.nombre}"/>
+                            </p:column>
 
-                    <p:column headerText="Activo" filterable="false">
-                        <h:outputText value="#{r.activo ? 'Sí' : 'No'}"/>
-                    </p:column>
+                            <p:column headerText="Apellido"
+                                field="apellido"
+                                filterBy="#{r.apellido}"
+                                filterMatchMode="contains"
+                                filterPlaceholder="Buscar por apellido">
+                                <h:outputText value="#{r.apellido}"/>
+                            </p:column>
 
-                </ta:tablaGeneral>
-            </div>
+                            <p:column headerText="Estado" filterable="false">
+                                <h:outputText
+                                    value="#{r.activo ? 'ACTIVO' : 'INACTIVO'}"
+                                    styleClass="#{r.activo ? 'estadoActivo' : 'estadoInactivo'}"/>
+                            </p:column>
+
+                            <p:column headerText="Observaciones"
+                                filterable="false">
+                                <h:outputText value="#{r.observaciones}"/>
+                            </p:column>
+
+                        </ta:tablaGeneral>
+                    </h:panelGroup>
+                </p:tab>
+
+                <!-- ROLES -->
+                <p:tab title="Roles">
+                    <!-- TABLA EN ESTADO NORMAL -->
+                    <h:panelGroup id="tablaEmpleadoRoles" layout="block" rendered="#{modelo.estadoRol == 'NINGUNO'}" styleClass="tablaContenedor">
+
+                        <p:dataTable id="tablaRoles"
+                            value="#{modelo.empleadoRoles}"
+                            var="er"
+                            paginator="true"
+                            rows="5"
+                            rowsPerPageTemplate="2,5,10,20"
+                            paginatorPosition="bottom"
+                            emptyMessage="No se encontraron roles asignados"
+                            selectionMode="single"
+                            selection="#{modelo.empleadoRolSeleccionado}"
+                            rowKey="#{er.idEmpleadoRol}">
+
+                            <p:ajax event="rowSelect" listener="#{modelo.seleccionarRol}" update="@form"/>
+
+                            <p:column headerText="ID" filterable="false">
+                                <h:outputText value="#{er.idEmpleadoRol}"/>
+                            </p:column>
+
+                            <p:column headerText="Empleado" filterable="false">
+                                <h:outputText value="#{er.idEmpleado.nombre} #{er.idEmpleado.apellido}"/>
+                            </p:column>
+
+                            <p:column headerText="Rol" filterable="false">
+                                <h:outputText value="#{er.idRol.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Estado" filterable="false">
+                                <h:outputText
+                                    value="#{er.activo ? 'ACTIVO' : 'INACTIVO'}"
+                                    styleClass="#{er.activo ? 'estadoActivo' : 'estadoInactivo'}"/>
+                            </p:column>
+
+                            <p:column headerText="Observaciones" filterable="false">
+                                <h:outputText value="#{er.observaciones}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:panelGroup>
+
+                    <!-- FORMULARIO CREAR / EDITAR ROL -->
+                    <h:panelGroup id="formularioRol"
+                        layout="block"
+                        rendered="#{modelo.estadoRol != 'NINGUNO'}"
+                        styleClass="formularioBloque">
+
+                        <h2 class="crud-subtitulo">
+                            #{modelo.estadoRol == 'EDITAR' ? 'Editar Rol' : 'Asignar Rol'}
+                        </h2>
+
+                        <div class="formGrid">
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="idEmpleadoRol" value="ID:"/>
+
+                                <p:inputText id="idEmpleadoRol"
+                                    value="#{modelo.empleadoRol.idEmpleado.idEmpleado}"
+                                    readonly="true"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="rol" value="Rol:"/>
+
+                                <p:selectOneMenu id="rol"
+                                    value="#{modelo.idRolSeleccionado}"
+                                    required="true"
+                                    requiredMessage="Debe seleccionar un rol"
+                                    disabled="#{modelo.estadoRol == 'EDITAR'}"
+                                    styleClass="inputCompleto">
+
+                                    <f:selectItem
+                                        itemLabel="Seleccione un rol"
+                                        itemValue="#{null}"
+                                        noSelectionOption="true"/>
+
+                                    <f:selectItems
+                                        value="#{modelo.roles}"
+                                        var="rol"
+                                        itemValue="#{rol.idRol}"
+                                        itemLabel="#{rol.activo ? rol.nombre : rol.nombre}"
+                                        itemDisabled="#{!rol.activo}"/>
+
+                                </p:selectOneMenu>
+                            </div>
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="activoRol" value="Activo:"/>
+
+                                <div class="checkboxContenedor">
+                                    <p:selectBooleanCheckbox id="activoRol" value="#{modelo.empleadoRol.activo}"/>
+                                </div>
+                            </div>
+
+                            <div class="campoGrupo">
+                                <p:outputLabel for="observacionesRol" value="Observaciones:"/>
+                                <p:inputText id="observacionesRol" value="#{modelo.empleadoRol.observaciones}" styleClass="inputCompleto"/>
+                            </div>
+
+                        </div>
+
+                        <div class="crud-botones">
+
+                            <p:commandButton
+                                value="Guardar Rol"
+                                action="#{modelo.guardarRol}"
+                                process="@form"
+                                update="@form"/>
+
+                            <p:commandButton
+                                value="Cancelar"
+                                action="#{modelo.cancelarRol}"
+                                process="@this"
+                                update="@form"
+                                immediate="true"/>
+
+                            <p:commandButton
+                                value="Eliminar"
+                                action="#{modelo.eliminarRol}"
+                                process="@this"
+                                update="@form"
+                                rendered="#{modelo.estadoRol == 'EDITAR'}"/>
+
+                        </div>
+
+                    </h:panelGroup>
+
+                    <!-- EMPLEADO NUEVO TODAVÍA SIN GUARDAR -->
+                    <h:panelGroup layout="block" rendered="#{modelo.estado == 'NUEVO'}" styleClass="formularioBloque">
+
+                        <p>
+                            Primero guarde el empleado para poder asignarle un rol.
+                        </p>
+
+                    </h:panelGroup>
+
+                </p:tab>
+
+            </p:tabView>
 
         </h:form>
 

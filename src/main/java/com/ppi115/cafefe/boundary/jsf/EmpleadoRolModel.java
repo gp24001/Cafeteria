@@ -74,16 +74,19 @@ public class EmpleadoRolModel extends AbstractModel<EmpleadoRol> implements Seri
 
     @Override
     public void guardar() {
-        if (idEmpleadoSeleccionado != null) {
-            Empleado empleado = empleadoDAO.findById(idEmpleadoSeleccionado);
-            getRegistro().setIdEmpleado(empleado);
+        if (idEmpleadoSeleccionado == null || idRolSeleccionado == null) {
+            return;
         }
-
-        if (idRolSeleccionado != null) {
-            Rol rol = rolDAO.findById(idRolSeleccionado);
-            getRegistro().setIdRol(rol);
+        Empleado empleado = empleadoDAO.findById(idEmpleadoSeleccionado);
+        Rol rol = rolDAO.findById(idRolSeleccionado);
+        if (empleado == null || !Boolean.TRUE.equals(empleado.getActivo())) {
+            return;
         }
-
+        if (rol == null || !Boolean.TRUE.equals(rol.getActivo())) {
+            return;
+        }
+        getRegistro().setIdEmpleado(empleado);
+        getRegistro().setIdRol(rol);
         super.guardar();
     }
 
@@ -127,6 +130,15 @@ public class EmpleadoRolModel extends AbstractModel<EmpleadoRol> implements Seri
             idRolSeleccionado = null;
         }
     }
+    
+    
+    public List<Rol> getRolesActivos() {
+    return rolDAO.findActivos();
+}
+
+public List<Empleado> getEmpleadosActivos() {
+    return empleadoDAO.findActivos();
+}
 
     public List<Empleado> getEmpleados() {
         return empleadoDAO.findAll();

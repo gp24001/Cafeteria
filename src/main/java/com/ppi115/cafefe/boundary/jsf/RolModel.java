@@ -44,8 +44,7 @@ public class RolModel extends AbstractModel<Rol> implements Serializable {
         return registro.getIdRol();
     }
 
-    @Override
-    public String getNombreBean() {
-        return "Rol";
+    public RolModel() {
+        setNombreBean("Rol");
     }
 }

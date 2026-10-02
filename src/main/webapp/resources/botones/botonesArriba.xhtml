@@ -63,7 +63,8 @@
             value="Eliminar"
             actionListener="#{cc.attrs.modelo.btnEliminar}"
             process="@this"
-            update="#{cc.attrs.actualizar}"/>
+            update="#{cc.attrs.actualizar}"
+            rendered="#{cc.attrs.modelo.estado == 'EDITAR'}"/>
 
     </div>
 
