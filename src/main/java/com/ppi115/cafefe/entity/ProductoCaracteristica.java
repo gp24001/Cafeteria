@@ -17,6 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -40,12 +41,15 @@ public class ProductoCaracteristica implements Serializable {
     @Column(name = "id_producto_caracteristica", nullable = false)
     @Convert(converter = UUIDConverter.class)
     private UUID idProductoCaracteristica;
+    @NotBlank(message = "El valor es obligatorio")
     @Size(max = 2147483647)
     @Column(name = "valor", length = 2147483647)
     private String valor;
+    @NotNull(message = "La característica es obligatoria")
     @JoinColumn(name = "id_caracteristica", referencedColumnName = "id_caracteristica")
     @ManyToOne(fetch = FetchType.LAZY)
     private Caracteristica idCaracteristica;
+    @NotNull(message = "El producto es obligatorio")
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     @ManyToOne(fetch = FetchType.LAZY)
     private Producto idProducto;

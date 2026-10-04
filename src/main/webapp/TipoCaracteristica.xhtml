@@ -7,84 +7,119 @@
     xmlns:bo="jakarta.faces.composite/botones"
     xmlns:ta="jakarta.faces.composite/tablas"
     template="/WEB-INF/templates/general.xhtml">
- 
-    <ui:param
-        name="modelo" value="#{tipoCaracteristicaModel}"/>
+
+    <ui:param name="modelo" value="#{tipoCaracteristicaModel}"/>
+    <ui:param name="tituloPagina" value="Tipo de Característica"/>
 
     <ui:define name="contenido">
-
         <h:form id="formTabla">
 
-            <p:growl id="growl" showDetail="true" life="5000"/>
+            <p:growl id="growl" showDetail="false" life="5000"/>
 
             <div class="crud-botones">
                 <bo:botonesArriba modelo="#{modelo}"/>
             </div>
 
-            <h:panelGroup id="panelFormulario" layout="block" rendered="#{modelo.estado != 'NINGUNO'}" styleClass="formularioBloque">
+            <!-- FORMULARIO -->
+            <h:panelGroup id="panelFormulario"
+                layout="block"
+                rendered="#{modelo.estado != 'NINGUNO'}"
+                styleClass="formularioBloque">
 
-                <h2 class="crud-subtitulo"> Datos del #{modelo.nombreBean} </h2>
+                <h2 class="crud-subtitulo">
+                    Datos del Tipo de Característica
+                </h2>
 
                 <div class="formGrid">
-                    
+
                     <div class="campoGrupo">
                         <p:outputLabel for="nombre" value="Nombre:"/>
-                        <p:inputText id="nombre" value="#{modelo.registro.nombre}" styleClass="inputCompleto"/>
+
+                        <p:inputText id="nombre"
+                            value="#{modelo.registro.nombre}"
+                            required="true"
+                            requiredMessage="El nombre es obligatorio"
+                            maxlength="150"
+                            styleClass="inputCompleto"/>
                     </div>
 
                     <div class="campoGrupo">
-                        <p:outputLabel for="expresionRegular" value="Expresión Regular:"/>
-                        <p:inputText id="expresionRegular" value="#{modelo.registro.expresionRegular}" styleClass="inputCompleto"/>
+                        <p:outputLabel for="expresionRegular"
+                            value="Expresión regular:"/>
+
+                        <p:inputText id="expresionRegular"
+                            value="#{modelo.registro.expresionRegular}"
+                            styleClass="inputCompleto"/>
                     </div>
 
                     <div class="campoGrupo">
-                        <p:outputLabel for="observaciones" value="Observaciones:"/>
-                        <p:inputText id="observaciones" value="#{modelo.registro.observaciones}" styleClass="inputCompleto"/>
+                        <p:outputLabel for="observaciones"
+                            value="Observaciones:"/>
+
+                        <p:inputText id="observaciones"
+                            value="#{modelo.registro.observaciones}"
+                            styleClass="inputCompleto"/>
                     </div>
 
-                    <div class="campoGrupo">                     
-                        <p:outputLabel for="activo" value="Activo:"/>   
-                        
-                        <div class="checkboxContenedor">                            
-                            <p:selectBooleanCheckbox id="activo" value="#{modelo.registro.activo}"/>
+                    <div class="campoGrupo">
+                        <p:outputLabel for="activo" value="Activo:"/>
+
+                        <div class="checkboxContenedor">
+                            <p:selectBooleanCheckbox id="activo"
+                                value="#{modelo.registro.activo}"/>
                         </div>
-                        
                     </div>
-                    
+
                 </div>
+
             </h:panelGroup>
-            
-            <div class="tablaAcciones">
-                <p:button value="Característica"
-                    outcome="Caracteristica"
-                    styleClass="botonFlat"/>
-            </div>
 
-            <div class="tablaContenedor">
-                <ta:tablaGeneral modelo="#{modelo}" filas="5" opcionesFilas="2,5,10,20">
+            <!-- TABLA -->
+            <h:panelGroup id="panelTabla"
+                layout="block"
+                rendered="#{modelo.estado == 'NINGUNO'}"
+                styleClass="tablaContenedor">
 
-                    <p:column headerText="Nombre" field="nombre" filterBy="#{r.nombre}"
-                        filterMatchMode="contains" filterPlaceholder="Buscar por nombre">                      
+                <ta:tablaGeneral modelo="#{modelo}"
+                    filas="5"
+                    opcionesFilas="2,5,10,20">
+
+                    <p:column headerText="ID" filterable="false">
+                        <h:outputText value="#{r.idTipoCaracteristica}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre"
+                        field="nombre"
+                        filterBy="#{r.nombre}"
+                        filterMatchMode="contains"
+                        filterPlaceholder="Buscar por nombre">
+
                         <h:outputText value="#{r.nombre}"/>
                     </p:column>
 
-                    <p:column headerText="Expresión Regular" filterable="false">
+                    <p:column headerText="Expresión regular"
+                        filterable="false">
+
                         <h:outputText value="#{r.expresionRegular}"/>
                     </p:column>
 
-                    <p:column headerText="Observaciones" filterable="false">
-                        <h:outputText value="#{r.observaciones}"/>
+                    <p:column headerText="Estado" filterable="false">
+                        <h:outputText
+                            value="#{r.activo ? 'ACTIVO' : 'INACTIVO'}"
+                            styleClass="#{r.activo ? 'estadoActivo' : 'estadoInactivo'}"/>
                     </p:column>
-                    
-                    <p:column headerText="Activo" filterable="false">
-                        <h:outputText value="#{r.activo ? 'Sí' : 'No'}"/>
+
+                    <p:column headerText="Observaciones"
+                        filterable="false">
+
+                        <h:outputText value="#{r.observaciones}"/>
                     </p:column>
 
                 </ta:tablaGeneral>
-            </div>
+
+            </h:panelGroup>
 
         </h:form>
-
     </ui:define>
 
 </ui:composition>

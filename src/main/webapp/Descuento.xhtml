@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="primefaces"
+    xmlns:bo="jakarta.faces.composite/botones"
+    xmlns:ta="jakarta.faces.composite/tablas"
+    template="/WEB-INF/templates/general.xhtml">
+
+    <ui:param name="modelo" value="#{descuentoModel}"/>
+    <ui:param name="tituloPagina" value="Descuento"/>
+
+    <ui:define name="contenido">
+        <h:form id="formTabla">
+
+            <p:growl id="growl" showDetail="false" life="5000"/>
+
+            <div class="crud-botones">
+                <bo:botonesArriba modelo="#{modelo}"/>
+            </div>
+
+            <!-- FORMULARIO -->
+            <h:panelGroup id="panelFormulario"
+                layout="block"
+                rendered="#{modelo.estado != 'NINGUNO'}"
+                styleClass="formularioBloque">
+
+                <h2 class="crud-subtitulo">
+                    Datos del Descuento
+                </h2>
+
+                <div class="formGrid">
+
+                    <div class="campoGrupo">
+                        <p:outputLabel for="nombre" value="Nombre:"/>
+
+                        <p:inputText id="nombre"
+                            value="#{modelo.registro.nombre}"
+                            required="true"
+                            requiredMessage="El nombre es obligatorio"
+                            maxlength="150"
+                            styleClass="inputCompleto"/>
+                    </div>
+
+                    <div class="campoGrupo">
+                        <p:outputLabel for="tipoDescuento"
+                            value="Tipo de descuento:"/>
+
+                        <p:selectOneMenu id="tipoDescuento"
+                            value="#{modelo.idTipoDescuentoSeleccionado}"
+                            required="true"
+                            requiredMessage="Debe seleccionar un tipo de descuento"
+                            disabled="#{modelo.estado == 'EDITAR'}"
+                            styleClass="inputCompleto">
+
+                            <f:selectItem
+                                itemLabel="Seleccione un tipo"
+                                itemValue="#{null}"
+                                noSelectionOption="true"/>
+
+                            <f:selectItems
+                                value="#{modelo.tiposDescuento}"
+                                var="t"
+                                itemValue="#{t.idTipoDescuento}"
+                                itemLabel="#{t.activo ? t.nombre : t.nombre}"
+                                itemDisabled="#{!t.activo}"/>
+
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="campoGrupo">
+                        <p:outputLabel for="fechaInicio"
+                            value="Fecha de inicio:"/>
+
+                        <p:datePicker id="fechaInicio"
+                            value="#{modelo.registro.fechaInicio}"
+                            required="true"
+                            requiredMessage="La fecha de inicio es obligatoria"
+                            showTime="true"
+                            hourFormat="24"
+                            pattern="dd/MM/yyyy HH:mm"
+                            styleClass="inputCompleto"/>
+                    </div>
+
+                    <div class="campoGrupo">
+                        <p:outputLabel for="fechaFin"
+                            value="Fecha de finalización:"/>
+
+                        <p:datePicker id="fechaFin"
+                            value="#{modelo.registro.fechaFin}"
+                            showTime="true"
+                            hourFormat="24"
+                            pattern="dd/MM/yyyy HH:mm"
+                            placeholder="Sin fecha de finalización"
+                            styleClass="inputCompleto"/>
+                    </div>
+
+                    <div class="campoGrupo">
+                        <p:outputLabel for="observaciones"
+                            value="Observaciones:"/>
+
+                        <p:inputText id="observaciones"
+                            value="#{modelo.registro.observaciones}"
+                            styleClass="inputCompleto"/>
+                    </div>
+
+                </div>
+
+            </h:panelGroup>
+
+            <!-- TABLA -->
+            <h:panelGroup id="panelTabla"
+                layout="block"
+                rendered="#{modelo.estado == 'NINGUNO'}"
+                styleClass="tablaContenedor">
+
+                <ta:tablaGeneral modelo="#{modelo}"
+                    filas="5"
+                    opcionesFilas="2,5,10,20">
+
+                    <p:column headerText="ID"
+                        filterable="false">
+
+                        <h:outputText value="#{r.idDescuento}"/>
+                    </p:column>
+
+                    <p:column headerText="Nombre"
+                        field="nombre"
+                        filterBy="#{r.nombre}"
+                        filterMatchMode="contains"
+                        filterPlaceholder="Buscar por nombre">
+
+                        <h:outputText value="#{r.nombre}"/>
+                    </p:column>
+
+                    <p:column headerText="Tipo"
+                        filterable="false">
+
+                        <h:outputText value="#{r.idTipoDescuento.nombre}"/>
+                    </p:column>
+
+                    <p:column headerText="Fecha inicio"
+                        filterable="false">
+
+                        <h:outputText value="#{r.fechaInicio}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Fecha fin"
+                        filterable="false">
+
+                        <h:outputText
+                            value="#{r.fechaFin}"
+                            rendered="#{r.fechaFin != null}">
+
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                        </h:outputText>
+
+                        <h:outputText
+                            value="SIN FECHA FIN"
+                            rendered="#{r.fechaFin == null}"/>
+                    </p:column>
+
+                    <p:column headerText="Observaciones"
+                        filterable="false">
+
+                        <h:outputText value="#{r.observaciones}"/>
+                    </p:column>
+
+                </ta:tablaGeneral>
+
+            </h:panelGroup>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

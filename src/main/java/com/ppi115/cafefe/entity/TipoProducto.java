@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -42,7 +43,8 @@ public class TipoProducto implements Serializable {
     private UUID idTipoProducto;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 150)
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(max = 150, message = "El nombre no puede superar los 150 caracteres")
     @Column(name = "nombre", nullable = false, length = 150)
     private String nombre;
     @Column(name = "activo")

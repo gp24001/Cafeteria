@@ -15,6 +15,10 @@ public class TipoCaracteristicaModel extends AbstractModel<TipoCaracteristica> i
     @Inject
     private TipoCaracteristicaDAO dao;
 
+    public TipoCaracteristicaModel() {
+        setNombreBean("Tipo de Característica");
+    }
+    
     @Override
     public TipoCaracteristicaDAO getDao() {
         return dao;
@@ -30,22 +34,16 @@ public class TipoCaracteristicaModel extends AbstractModel<TipoCaracteristica> i
 
     @Override
     public Object getRegistrerById(Object id) {
-        if (id == null) {
-            return null;
-        }
+        if (id == null) return null;
         return dao.findById(id);
     }
 
     @Override
     public Object getIdByRegistrer(TipoCaracteristica registro) {
-        if (registro == null) {
-            return null;
-        }
+        if (registro == null) return null;
         return registro.getIdTipoCaracteristica();
     }
 
-    @Override
-    public String getNombreBean() {
-        return "Tipo de Característica";
-    }
+     
 }
+

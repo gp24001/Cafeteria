@@ -17,6 +17,8 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -43,11 +45,13 @@ public class Producto implements Serializable {
     private UUID idProducto;
     @Basic(optional = false)
     @NotNull
+    @NotBlank(message = "El nombre es obligatorio")
     @Size(min = 1, max = 150)
     @Column(name = "nombre", nullable = false, length = 150)
     private String nombre;
     @Basic(optional = false)
     @NotNull
+    @DecimalMin(value = "0.01", message = "El precio sugerido debe ser mayor a 0")
     @Column(name = "precio_sugerido", nullable = false, precision = 8, scale = 2)
     private BigDecimal precioSugerido;
     @Basic(optional = false)

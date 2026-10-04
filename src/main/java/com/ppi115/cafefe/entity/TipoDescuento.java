@@ -48,6 +48,7 @@ public class TipoDescuento implements Serializable {
     private String nombre;
     @Column(name = "activo")
     private Boolean activo;
+    @NotNull(message = "El límite de descuento es obligatorio")
     @Min(value = 1, message = "El descuento debe ser mayor o igual a 1")
     @Max(value = 100, message = "El descuento no puede ser mayor a 100")
     @Column(name = "descuento_maximo")

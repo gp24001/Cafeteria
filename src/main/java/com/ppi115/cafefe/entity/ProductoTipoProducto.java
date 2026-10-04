@@ -20,6 +20,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -47,9 +48,14 @@ public class ProductoTipoProducto implements Serializable {
     @Column(name = "fecha_creacion")
     @Temporal(TemporalType.TIME)
     private Date fechaCreacion;
+    @Size(max = 2147483647)
+    @Column(name = "observaciones", length = 2147483647)
+    private String observaciones;
+    @NotNull(message = "El producto es obligatorio")
     @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
     @ManyToOne(fetch = FetchType.LAZY)
     private Producto idProducto;
+    @NotNull(message = "El tipo de producto es obligatorio")
     @JoinColumn(name = "id_tipo_producto", referencedColumnName = "id_tipo_producto")
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoProducto idTipoProducto;
@@ -83,6 +89,14 @@ public class ProductoTipoProducto implements Serializable {
 
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+    
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public Producto getIdProducto() {

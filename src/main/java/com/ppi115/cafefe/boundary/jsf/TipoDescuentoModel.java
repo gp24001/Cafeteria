@@ -15,6 +15,10 @@ public class TipoDescuentoModel extends AbstractModel<TipoDescuento> implements 
     @Inject
     private TipoDescuentoDAO dao;
 
+    public TipoDescuentoModel() {
+        setNombreBean("Tipo de Descuento");
+    }
+
     @Override
     public TipoDescuentoDAO getDao() {
         return dao;
@@ -25,28 +29,18 @@ public class TipoDescuentoModel extends AbstractModel<TipoDescuento> implements 
         TipoDescuento r = new TipoDescuento();
         r.setIdTipoDescuento(UUID.randomUUID());
         r.setActivo(true);
-        r.setDescuentoMaximo(50);
         return r;
     }
 
     @Override
     public Object getRegistrerById(Object id) {
-        if (id == null) {
-            return null;
-        }
+        if (id == null) return null;
         return dao.findById(id);
     }
 
     @Override
     public Object getIdByRegistrer(TipoDescuento registro) {
-        if (registro == null) {
-            return null;
-        }
+        if (registro == null) return null;
         return registro.getIdTipoDescuento();
-    }
-
-    @Override
-    public String getNombreBean() {
-        return "Tipo de Descuento";
     }
 }

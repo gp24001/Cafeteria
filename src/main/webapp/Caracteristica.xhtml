@@ -2,14 +2,15 @@
 <ui:composition
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
     xmlns:ui="jakarta.faces.facelets"
     xmlns:p="primefaces"
     xmlns:bo="jakarta.faces.composite/botones"
     xmlns:ta="jakarta.faces.composite/tablas"
     template="/WEB-INF/templates/general.xhtml">
 
-    <ui:param name="modelo" value="#{rolModel}"/>
-    <ui:param name="tituloPagina" value="Rol"/>
+    <ui:param name="modelo" value="#{caracteristicaModel}"/>
+    <ui:param name="tituloPagina" value="Característica"/>
 
     <ui:define name="contenido">
         <h:form id="formTabla">
@@ -21,9 +22,14 @@
             </div>
 
             <!-- FORMULARIO -->
-            <h:panelGroup id="panelFormulario" layout="block" rendered="#{modelo.estado != 'NINGUNO'}" styleClass="formularioBloque">
+            <h:panelGroup id="Formulario"
+                layout="block"
+                rendered="#{modelo.estado != 'NINGUNO'}"
+                styleClass="formularioBloque">
 
-                <h2 class="crud-subtitulo">Datos del Rol</h2>
+                <h2 class="crud-subtitulo">
+                    Datos de la Característica
+                </h2>
 
                 <div class="formGrid">
 
@@ -34,13 +40,39 @@
                             value="#{modelo.registro.nombre}"
                             required="true"
                             requiredMessage="El nombre es obligatorio"
-                            validatorMessage="El nombre solo puede contener letras y espacios"
                             maxlength="150"
                             styleClass="inputCompleto"/>
                     </div>
 
                     <div class="campoGrupo">
-                        <p:outputLabel for="observaciones" value="Observaciones:"/>
+                        <p:outputLabel for="tipoCaracteristica"
+                            value="Tipo de característica:"/>
+
+                        <p:selectOneMenu id="tipoCaracteristica"
+                            value="#{modelo.idTipoCaracteristicaSeleccionado}"
+                            required="true"
+                            requiredMessage="Debe seleccionar un tipo de característica"
+                            disabled="#{modelo.estado == 'EDITAR'}"
+                            styleClass="inputCompleto">
+
+                            <f:selectItem
+                                itemLabel="Seleccione un tipo"
+                                itemValue="#{null}"
+                                noSelectionOption="true"/>
+
+                            <f:selectItems
+                                value="#{modelo.tiposCaracteristica}"
+                                var="t"
+                                itemValue="#{t.idTipoCaracteristica}"
+                                itemLabel="#{t.activo ? t.nombre : t.nombre.concat(' - INACTIVO')}"
+                                itemDisabled="#{!t.activo}"/>
+
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="campoGrupo">
+                        <p:outputLabel for="observaciones"
+                            value="Observaciones:"/>
 
                         <p:inputText id="observaciones"
                             value="#{modelo.registro.observaciones}"
@@ -51,7 +83,8 @@
                         <p:outputLabel for="activo" value="Activo:"/>
 
                         <div class="checkboxContenedor">
-                            <p:selectBooleanCheckbox id="activo" value="#{modelo.registro.activo}"/>
+                            <p:selectBooleanCheckbox id="activo"
+                                value="#{modelo.registro.activo}"/>
                         </div>
                     </div>
 
@@ -70,7 +103,7 @@
                     opcionesFilas="2,5,10,20">
 
                     <p:column headerText="ID" filterable="false">
-                        <h:outputText value="#{r.idRol}"/>
+                        <h:outputText value="#{r.idCaracteristica}"/>
                     </p:column>
 
                     <p:column headerText="Nombre"
@@ -82,13 +115,24 @@
                         <h:outputText value="#{r.nombre}"/>
                     </p:column>
 
-                    <p:column headerText="Estado" filterable="false">
+                    <p:column headerText="Tipo"
+                        filterable="false">
+
+                        <h:outputText
+                            value="#{r.idTipoCaracteristica.nombre}"/>
+                    </p:column>
+
+                    <p:column headerText="Estado"
+                        filterable="false">
+
                         <h:outputText
                             value="#{r.activo ? 'ACTIVO' : 'INACTIVO'}"
                             styleClass="#{r.activo ? 'estadoActivo' : 'estadoInactivo'}"/>
                     </p:column>
 
-                    <p:column headerText="Observaciones" filterable="false">
+                    <p:column headerText="Observaciones"
+                        filterable="false">
+
                         <h:outputText value="#{r.observaciones}"/>
                     </p:column>
 

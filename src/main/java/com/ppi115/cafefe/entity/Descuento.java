@@ -61,6 +61,7 @@ public class Descuento implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "observaciones", length = 2147483647)
     private String observaciones;
+    @NotNull(message = "Debe seleccionar un tipo de descuento")
     @JoinColumn(name = "id_tipo_descuento", referencedColumnName = "id_tipo_descuento")
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoDescuento idTipoDescuento;

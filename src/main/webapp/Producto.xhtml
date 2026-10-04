@@ -1,0 +1,924 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="primefaces"
+    xmlns:bo="jakarta.faces.composite/botones"
+    xmlns:ta="jakarta.faces.composite/tablas"
+    template="/WEB-INF/templates/general.xhtml">
+
+    <ui:param name="modelo" value="#{productoModel}"/>
+    <ui:param name="tituloPagina" value="Producto"/>
+
+    <ui:define name="contenido">
+
+        <h:form id="formProducto">
+
+            <p:growl id="growl" showDetail="false" life="5000"/>
+
+            <p:tabView id="tabsProducto" activeIndex="#{modelo.pestanaActiva}">
+
+                <p:ajax event="tabChange" process="@this"/>
+
+                <!-- =========================
+                     GENERALIDADES
+                     ========================= -->
+                <p:tab title="Generalidades">
+
+                    <div class="crud-botones">
+
+                        <p:commandButton
+                            value="Nuevo Producto"
+                            action="#{modelo.nuevo}"
+                            process="@this"
+                            update="@form"
+                            rendered="#{modelo.estado == 'NINGUNO'}"/>
+
+                        <p:commandButton
+                            value="Guardar"
+                            action="#{modelo.guardar}"
+                            process="@this :formProducto:tabsProducto:panelFormularioProducto"
+                            update="@form"
+                            rendered="#{modelo.estado != 'NINGUNO'}"/>
+
+                        <p:commandButton
+                            value="Cancelar"
+                            action="#{modelo.cancelar}"
+                            process="@this"
+                            update="@form"
+                            immediate="true"
+                            resetValues="true"
+                            rendered="#{modelo.estado != 'NINGUNO'}"/>
+
+                        <p:commandButton
+                            value="Eliminar"
+                            action="#{modelo.eliminar(modelo.seleccionado)}"
+                            process="@this"
+                            update="@form"
+                            rendered="#{modelo.estado == 'EDITAR'}"/>
+
+                    </div>
+
+                    <!-- FORMULARIO PRODUCTO -->
+                    <h:panelGroup
+                        id="panelFormularioProducto"
+                        layout="block"
+                        rendered="#{modelo.estado != 'NINGUNO'}"
+                        styleClass="formularioBloque">
+
+                        <h2 class="crud-subtitulo"> Datos del Producto </h2>
+
+                        <div class="formGrid">
+
+                            <!-- NOMBRE -->
+                            <div class="campoGrupo">
+                                <p:outputLabel for="nombre" value="Nombre:"/>
+                                <p:inputText
+                                    id="nombre"
+                                    value="#{modelo.registro.nombre}"
+                                    required="true"
+                                    requiredMessage="El nombre es obligatorio"
+                                    maxlength="150"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <!-- PRECIO -->
+                            <div class="campoGrupo">
+                                <p:outputLabel
+                                    for="precioSugerido" value="Precio sugerido:"/>
+                                <p:inputNumber
+                                    id="precioSugerido"
+                                    value="#{modelo.registro.precioSugerido}"
+                                    required="true"
+                                    requiredMessage="El precio sugerido es obligatorio"
+                                    decimalPlaces="2"
+                                    minValue="0.01"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <!-- COMENTARIOS -->
+                            <div class="campoGrupo">
+                                <p:outputLabel
+                                    for="comentarios" value="Comentarios:"/>
+                                <p:inputTextarea
+                                    id="comentarios"
+                                    value="#{modelo.registro.comentarios}"
+                                    rows="3"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <!-- ACTIVO -->
+                            <div class="campoGrupo">
+                                <p:outputLabel
+                                    for="activo" value="Activo:"/>
+                                <div class="checkboxContenedor">
+                                    <p:selectBooleanCheckbox id="activo" value="#{modelo.registro.activo}"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </h:panelGroup>
+
+                    <!-- TABLA PRODUCTOS -->
+                    <h:panelGroup
+                        id="panelTablaProducto"
+                        layout="block"
+                        rendered="#{modelo.estado == 'NINGUNO'}"
+                        styleClass="tablaContenedor">
+
+                        <ta:tablaGeneral
+                            modelo="#{modelo}"
+                            filas="5"
+                            opcionesFilas="2,5,10,20"
+                            actualizar="@form">
+
+                            <p:column headerText="ID" filterable="false">
+                                <h:outputText value="#{r.idProducto}"/>
+                            </p:column>
+
+                            <p:column
+                                headerText="Nombre"
+                                field="nombre"
+                                filterBy="#{r.nombre}"
+                                filterMatchMode="contains"
+                                filterPlaceholder="Buscar por nombre">
+                                <h:outputText value="#{r.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Precio sugerido" filterable="false">
+                                <h:outputText value="#{r.precioSugerido}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column
+                                headerText="Estado" filterable="false">
+                                <h:outputText
+                                    value="#{r.activo ? 'ACTIVO' : 'INACTIVO'}"
+                                    styleClass="#{r.activo ? 'estadoActivo' : 'estadoInactivo'}"/>
+                            </p:column>
+
+                            <p:column
+                                headerText="Comentarios"
+                                filterable="false">
+                                <h:outputText
+                                    value="#{r.comentarios}"/>
+                            </p:column>
+
+                        </ta:tablaGeneral>
+
+                    </h:panelGroup>
+
+                </p:tab>
+
+                <!-- =========================
+                     TIPOS
+                     ========================= -->
+                <p:tab title="Tipos">
+
+                    <!-- FORMULARIO PRODUCTO TIPO PRODUCTO -->
+                    <h:panelGroup
+                        id="panelFormularioTipo"
+                        layout="block"
+                        rendered="#{modelo.estadoTipoProducto != 'NINGUNO'}"
+                        styleClass="formularioBloque">
+
+                        <h2 class="crud-subtitulo"> Tipo del Producto </h2>
+
+                        <div class="formGrid">
+
+                            <!-- ID PRODUCTO -->
+                            <div class="campoGrupo">
+                                <p:outputLabel for="idProductoAsignacion" value="ID Producto:"/>
+                                <p:inputText
+                                    id="idProductoAsignacion"
+                                    value="#{modelo.productoTipoProducto.idProducto.idProducto}"
+                                    readonly="true"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                            <!-- TIPO PRODUCTO -->
+                            <div class="campoGrupo">
+                                <p:outputLabel for="tipoSeleccionado" value="Tipo de Producto:"/>
+
+                                <h:panelGroup id="panelTipoSeleccionado" layout="block">
+                                    <p:inputText
+                                        id="tipoSeleccionado"
+                                        value="#{modelo.tipoProductoSeleccionado.nombre}"
+                                        readonly="true"
+                                        placeholder="Sin tipo seleccionado"
+                                        styleClass="inputCompleto"/>
+                                </h:panelGroup>
+
+                                <p:commandButton
+                                    value="Seleccionar Tipo"
+                                    type="button"
+                                    onclick="PF('dialogTiposProducto').show()"
+                                    rendered="#{modelo.estadoTipoProducto == 'NUEVO'}"/>
+                            </div>
+
+                            <!-- FECHA CREACIÓN -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel for="fechaCreacionTipo" value="Fecha de creación:"/>
+
+                                <p:datePicker
+                                    id="fechaCreacionTipo"
+                                    value="#{modelo.productoTipoProducto.fechaCreacion}"
+                                    pattern="dd/MM/yyyy HH:mm"
+                                    timeZone="America/El_Salvador"
+                                    showTime="true"
+                                    hourFormat="24"
+                                    disabled="true"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                            <!-- ACTIVO -->
+                            <div class="campoGrupo">
+                                <p:outputLabel for="activoTipo" value="Activo:"/>
+                                <div class="checkboxContenedor">
+                                    <p:selectBooleanCheckbox id="activoTipo" value="#{modelo.productoTipoProducto.activo}"/>
+                                </div>
+                            </div>
+
+                            <!-- OBSERVACIONES -->
+                            <div class="campoGrupo">
+                                <p:outputLabel for="observacionesTipo" value="Observaciones:"/>
+                                <p:inputTextarea
+                                    id="observacionesTipo"
+                                    value="#{modelo.productoTipoProducto.observaciones}"
+                                    rows="3"
+                                    styleClass="inputCompleto"/>
+                            </div>
+
+                        </div>
+
+                        <!-- BOTONES DEL TIPO -->
+                        <div class="botonesCrud">
+
+                            <p:commandButton
+                                value="Guardar Tipo"
+                                action="#{modelo.guardarTipoProducto}"
+                                process="@this activoTipo observacionesTipo"
+                                update="@form"/>
+
+                            <p:commandButton
+                                value="Cancelar"
+                                action="#{modelo.cancelarTipoProducto}"
+                                process="@this"
+                                update="@form"
+                                immediate="true"
+                                resetValues="true"/>
+
+                            <p:commandButton
+                                value="Eliminar"
+                                action="#{modelo.eliminarTipoProducto}"
+                                process="@this"
+                                update="@form"
+                                rendered="#{modelo.estadoTipoProducto == 'EDITAR'}"/>
+
+                        </div>
+
+                    </h:panelGroup>
+
+                    <!-- TABLA PRODUCTO TIPO PRODUCTO -->
+                    <h:panelGroup
+                        id="panelTablaTipos"
+                        layout="block"
+                        rendered="#{modelo.estadoTipoProducto == 'NINGUNO'}"
+                        styleClass="tablaContenedor">
+
+                        <p:dataTable
+                            id="tablaTipos"
+                            value="#{modelo.productosTipoProducto}"
+                            var="pt"
+                            paginator="true"
+                            rows="5"
+                            rowsPerPageTemplate="2,5,10,20"
+                            paginatorPosition="bottom"
+                            emptyMessage="No se encontraron asignaciones"
+                            selectionMode="single"
+                            selection="#{modelo.productoTipoProductoSeleccionado}"
+                            rowKey="#{pt.idProductoTipoProducto}">
+
+                            <p:ajax event="rowSelect" listener="#{modelo.seleccionarTipoProducto}"
+                                    process="@this" update="@form"/>
+
+                            <p:column headerText="Producto">
+                                <h:outputText
+                                    value="#{pt.idProducto.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Tipo de Producto">
+                                <h:outputText
+                                    value="#{pt.idTipoProducto.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Estado">
+                                <h:outputText
+                                    value="#{pt.activo ? 'ACTIVO' : 'INACTIVO'}"
+                                    styleClass="#{pt.activo ? 'estadoActivo' : 'estadoInactivo'}"/>
+                            </p:column>
+
+                            <p:column headerText="Fecha de creación">
+                                <h:outputText
+                                    value="#{pt.fechaCreacion}">
+                                    <f:convertDateTime
+                                        pattern="dd/MM/yyyy HH:mm"
+                                        timeZone="America/El_Salvador"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Observaciones">
+                                <h:outputText
+                                    value="#{pt.observaciones}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:panelGroup>
+
+                </p:tab>
+
+                <!-- =========================
+                     CARACTERÍSTICAS
+                     ========================= -->
+                <p:tab title="Características">
+
+                    <!-- FORMULARIO -->
+                    <h:panelGroup
+                        id="panelFormularioCaracteristica"
+                        layout="block"
+                        rendered="#{modelo.estadoCaracteristica != 'NINGUNO'}"
+                        styleClass="formularioBloque">
+
+                        <h2 class="crud-subtitulo">
+                            Característica del Producto
+                        </h2>
+
+                        <div class="formGrid">
+
+                            <!-- ID PRODUCTO -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="idProductoCaracteristica"
+                                    value="ID Producto:"/>
+
+                                <p:inputText
+                                    id="idProductoCaracteristica"
+                                    value="#{modelo.productoCaracteristica.idProducto.idProducto}"
+                                    readonly="true"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                            <!-- CARACTERÍSTICA -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="caracteristicaSeleccionada"
+                                    value="Característica:"/>
+
+                                <h:panelGroup
+                                    id="panelCaracteristicaSeleccionada"
+                                    layout="block">
+
+                                    <p:inputText
+                                        id="caracteristicaSeleccionada"
+                                        value="#{modelo.caracteristicaSeleccionada.nombre}"
+                                        readonly="true"
+                                        placeholder="Sin característica seleccionada"
+                                        styleClass="inputCompleto"/>
+
+                                </h:panelGroup>
+
+                                <p:commandButton
+                                    value="Seleccionar Característica"
+                                    type="button"
+                                    onclick="PF('dialogCaracteristicas').show()"
+                                    rendered="#{modelo.estadoCaracteristica == 'NUEVO'}"
+                                    styleClass="botonBuscarTipo"/>
+
+                            </div>
+
+                            <!-- VALOR -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="valorCaracteristica"
+                                    value="Valor:"/>
+
+                                <p:inputText
+                                    id="valorCaracteristica"
+                                    value="#{modelo.productoCaracteristica.valor}"
+                                    required="true"
+                                    requiredMessage="El valor es obligatorio"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                        </div>
+
+                        <div class="botonesCrud">
+
+                            <p:commandButton
+                                value="Guardar Característica"
+                                action="#{modelo.guardarProductoCaracteristica}"
+                                process="@this valorCaracteristica"
+                                update="@form"/>
+
+                            <p:commandButton
+                                value="Cancelar"
+                                action="#{modelo.cancelarProductoCaracteristica}"
+                                process="@this"
+                                update="@form"
+                                immediate="true"
+                                resetValues="true"/>
+
+                            <p:commandButton
+                                value="Eliminar"
+                                action="#{modelo.eliminarProductoCaracteristica}"
+                                process="@this"
+                                update="@form"
+                                rendered="#{modelo.estadoCaracteristica == 'EDITAR'}"/>
+
+                        </div>
+
+                    </h:panelGroup>
+
+                    <!-- TABLA -->
+                    <h:panelGroup
+                        id="panelTablaCaracteristicas"
+                        layout="block"
+                        rendered="#{modelo.estadoCaracteristica == 'NINGUNO'}"
+                        styleClass="tablaContenedor">
+
+                        <p:dataTable
+                            id="tablaCaracteristicas"
+                            value="#{modelo.productosCaracteristica}"
+                            var="pc"
+                            paginator="true"
+                            rows="5"
+                            rowsPerPageTemplate="2,5,10,20"
+                            paginatorPosition="bottom"
+                            emptyMessage="No se encontraron características"
+                            selectionMode="single"
+                            selection="#{modelo.productoCaracteristicaSeleccionada}"
+                            rowKey="#{pc.idProductoCaracteristica}">
+
+                            <p:ajax
+                                event="rowSelect"
+                                listener="#{modelo.seleccionarProductoCaracteristica}"
+                                process="@this"
+                                update="@form"/>
+
+                            <p:column headerText="Producto">
+                                <h:outputText
+                                    value="#{pc.idProducto.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Característica">
+                                <h:outputText
+                                    value="#{pc.idCaracteristica.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Tipo">
+                                <h:outputText
+                                    value="#{pc.idCaracteristica.idTipoCaracteristica.nombre}"/>
+                            </p:column>
+
+                            <p:column headerText="Valor">
+                                <h:outputText
+                                    value="#{pc.valor}"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:panelGroup>
+
+                </p:tab>
+
+                <!-- =========================
+     DESCUENTOS
+     ========================= -->
+                <p:tab title="Descuentos">
+
+                    <!-- FORMULARIO DESCUENTO -->
+                    <h:panelGroup
+                        id="panelFormularioDescuento"
+                        layout="block"
+                        rendered="#{modelo.estado != 'NINGUNO'}"
+                        styleClass="formularioBloque">
+
+                        <h2 class="crud-subtitulo">
+                            Descuento del Producto
+                        </h2>
+
+                        <div class="formGrid">
+
+                            <!-- PRODUCTO -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="productoDescuento"
+                                    value="Producto:"/>
+
+                                <p:inputText
+                                    id="productoDescuento"
+                                    value="#{modelo.descuentoProducto.idProducto.nombre}"
+                                    readonly="true"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                            <!-- DESCUENTO -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="descuentoSeleccionado"
+                                    value="Descuento:"/>
+
+                                <h:panelGroup
+                                    id="panelDescuentoSeleccionado"
+                                    layout="block">
+
+                                    <p:inputText
+                                        id="descuentoSeleccionado"
+                                        value="#{modelo.descuentoSeleccionado.nombre}"
+                                        readonly="true"
+                                        placeholder="Sin descuento seleccionado"
+                                        styleClass="inputCompleto"/>
+
+                                </h:panelGroup>
+
+                                <p:commandButton
+                                    value="Seleccionar Descuento"
+                                    type="button"
+                                    onclick="PF('dialogDescuentos').show()"
+                                    rendered="#{modelo.descuentoProductoSeleccionado == null}"/>
+
+                            </div>
+
+                            <!-- PORCENTAJE -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="valorDescuento"
+                                    value="Porcentaje:"/>
+
+                                <p:inputNumber
+                                    id="valorDescuento"
+                                    value="#{modelo.descuentoProducto.valor}"
+                                    required="true"
+                                    requiredMessage="El porcentaje es obligatorio"
+                                    decimalPlaces="0"
+                                    minValue="1"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                            <!-- DESCUENTO MÁXIMO -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="maximoDescuento"
+                                    value="Máximo permitido:"/>
+
+                                <p:inputText
+                                    id="maximoDescuento"
+                                    value="#{modelo.descuentoSeleccionado.idTipoDescuento.descuentoMaximo}"
+                                    readonly="true"
+                                    placeholder="Seleccione un descuento"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                            <!-- FECHA INICIO -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="fechaInicioDescuento"
+                                    value="Desde:"/>
+
+                                <p:datePicker
+                                    id="fechaInicioDescuento"
+                                    value="#{modelo.descuentoProducto.fechaInicio}"
+                                    required="true"
+                                    requiredMessage="La fecha de inicio es obligatoria"
+                                    pattern="dd/MM/yyyy HH:mm"
+                                    showTime="true"
+                                    hourFormat="24"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                            <!-- FECHA FIN -->
+                            <div class="campoGrupo">
+
+                                <p:outputLabel
+                                    for="fechaFinDescuento"
+                                    value="Hasta:"/>
+
+                                <p:datePicker
+                                    id="fechaFinDescuento"
+                                    value="#{modelo.descuentoProducto.fechaFin}"
+                                    pattern="dd/MM/yyyy HH:mm"
+                                    showTime="true"
+                                    hourFormat="24"
+                                    styleClass="inputCompleto"/>
+
+                            </div>
+
+                        </div>
+
+                        <div class="botonesCrud">
+
+                            <p:commandButton
+                                value="Guardar Descuento"
+                                action="#{modelo.guardarDescuentoProducto}"
+                                process="@this valorDescuento fechaInicioDescuento fechaFinDescuento"
+                                update="@form"/>
+
+                            <p:commandButton
+                                value="Cancelar"
+                                action="#{modelo.cancelarDescuentoProducto}"
+                                process="@this"
+                                update="@form"
+                                immediate="true"
+                                resetValues="true"/>
+
+                            <p:commandButton
+                                value="Eliminar"
+                                action="#{modelo.eliminarDescuentoProducto}"
+                                process="@this"
+                                update="@form"
+                                immediate="true"
+                                rendered="#{modelo.descuentoProductoSeleccionado != null}"/>
+
+
+                        </div>
+
+                    </h:panelGroup>
+
+                    <!-- TABLA GENERAL DE DESCUENTOS -->
+                    <h:panelGroup
+                        id="panelTablaDescuentos"
+                        layout="block"
+                        rendered="#{modelo.estado == 'NINGUNO'}"
+                        styleClass="tablaContenedor">
+
+                        <p:dataTable
+                            id="tablaDescuentos"
+                            value="#{modelo.descuentosProducto}"
+                            var="dp"
+                            paginator="true"
+                            rows="5"
+                            rowsPerPageTemplate="2,5,10,20"
+                            paginatorPosition="bottom"
+                            emptyMessage="No se encontraron descuentos"
+                            selectionMode="single"
+                            selection="#{modelo.descuentoProductoSeleccionado}"
+                            rowKey="#{dp.idDescuentoProducto}">
+
+                            <p:ajax
+                                event="rowSelect"
+                                listener="#{modelo.seleccionarDescuentoProducto}"
+                                process="@this"
+                                update="@form"/>
+
+                            <!-- PRODUCTO -->
+                            <p:column
+                                headerText="Producto"
+                                filterBy="#{dp.idProducto.nombre}"
+                                filterMatchMode="contains"
+                                filterPlaceholder="Buscar producto">
+
+                                <h:outputText
+                                    value="#{dp.idProducto.nombre}"/>
+
+                            </p:column>
+
+                            <!-- DESCUENTO -->
+                            <p:column headerText="Descuento">
+
+                                <h:outputText
+                                    value="#{dp.idDescuento.idTipoDescuento.nombre}: #{dp.valor}%, #{dp.idDescuento.nombre}"/>
+
+                            </p:column>
+
+                            <!-- DESDE -->
+                            <p:column headerText="Desde">
+
+                                <h:outputText value="#{dp.fechaInicio}">
+
+                                    <f:convertDateTime
+                                        pattern="dd/MM/yyyy HH:mm"
+                                        timeZone="America/El_Salvador"/>
+
+                                </h:outputText>
+
+                            </p:column>
+
+                            <!-- HASTA -->
+                            <p:column headerText="Hasta">
+
+                                <h:outputText value="#{dp.fechaFin}">
+
+                                    <f:convertDateTime
+                                        pattern="dd/MM/yyyy HH:mm"
+                                        timeZone="America/El_Salvador"/>
+
+                                </h:outputText>
+
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:panelGroup>
+
+                </p:tab>
+
+            </p:tabView>
+
+            <!-- =========================
+                 BUSCADOR TIPO PRODUCTO
+                 ========================= -->
+            <p:dialog
+                id="dialogTipos"
+                widgetVar="dialogTiposProducto"
+                header="Buscar Tipo de Producto"
+                modal="true"
+                closable="true"
+                resizable="false"
+                responsive="true"
+                width="420">
+
+                <p:dataTable
+                    id="tablaTiposDisponibles"
+                    value="#{modelo.tiposProductoDisponibles}"
+                    var="tipo"
+                    emptyMessage="No se encontraron tipos">
+
+                    <p:column
+                        headerText="Tipo de Producto"
+                        filterBy="#{tipo.nombre}"
+                        filterMatchMode="contains"
+                        filterPlaceholder="Buscar por nombre">
+
+                        <!-- ACTIVO -->
+                        <p:commandLink
+                            value="#{tipo.nombre}"
+                            action="#{modelo.seleccionarTipoDisponible(tipo)}"
+                            process="@this"
+                            update=":formProducto:tabsProducto:panelTipoSeleccionado :formProducto:growl"
+                            oncomplete="PF('dialogTiposProducto').hide()"
+                            rendered="#{tipo.activo}"
+                            style="display:block;
+                            width:100%;
+                            padding:8px 5px;
+                            color:#4e342e !important;
+                            text-decoration:none !important;
+                            cursor:pointer;"/>
+
+                        <!-- INACTIVO -->
+                        <h:outputText
+                            value="#{tipo.nombre}"
+                            rendered="#{!tipo.activo}"
+                            style="display:block;
+                            width:100%;
+                            padding:8px 5px;
+                            color:#9e9e9e !important;
+                            opacity:0.60;
+                            cursor:not-allowed;"/>
+
+                    </p:column>
+
+                </p:dataTable>
+
+            </p:dialog>
+
+            <!-- =========================
+                 BUSCADOR DE CARACTERÍSTICAS
+                 ========================= -->
+            <p:dialog
+                id="dialogCaracteristicas"
+                widgetVar="dialogCaracteristicas"
+                header="Buscar Característica"
+                modal="true"
+                closable="true"
+                resizable="false"
+                responsive="true"
+                width="420">
+
+                <p:dataTable
+                    id="tablaCaracteristicasDisponibles"
+                    value="#{modelo.caracteristicasDisponibles}"
+                    var="caracteristica"
+                    emptyMessage="No se encontraron características">
+
+                    <p:column
+                        headerText="Característica"
+                        filterBy="#{caracteristica.nombre}"
+                        filterMatchMode="contains"
+                        filterPlaceholder="Buscar por nombre">
+
+                        <!-- ACTIVA -->
+                        <p:commandLink
+                            value="#{caracteristica.nombre}"
+                            action="#{modelo.seleccionarCaracteristicaDisponible(caracteristica)}"
+                            process="@this"
+                            update=":formProducto:tabsProducto:panelCaracteristicaSeleccionada :formProducto:growl"
+                            oncomplete="PF('dialogCaracteristicas').hide()"
+                            rendered="#{caracteristica.activo}"
+                            style="display:block;
+                            width:100%;
+                            padding:8px 5px;
+                            color:#4e342e !important;
+                            text-decoration:none !important;
+                            cursor:pointer;"/>
+
+                        <!-- INACTIVA -->
+                        <h:outputText
+                            value="#{caracteristica.nombre}"
+                            rendered="#{!caracteristica.activo}"
+                            style="display:block;
+                            width:100%;
+                            padding:8px 5px;
+                            color:#9e9e9e !important;
+                            opacity:0.60;
+                            cursor:not-allowed;"/>
+
+                    </p:column>
+
+                </p:dataTable>
+
+            </p:dialog>
+
+            <!-- =========================
+                 BUSCADOR DE DESCUENTOS
+                 ========================= -->
+            <p:dialog
+                id="dialogDescuentos"
+                widgetVar="dialogDescuentos"
+                header="Buscar Descuento"
+                modal="true"
+                closable="true"
+                resizable="false"
+                responsive="true"
+                width="520">
+
+                <p:dataTable
+                    id="tablaDescuentosDisponibles"
+                    value="#{modelo.descuentosDisponibles}"
+                    var="descuento"
+                    emptyMessage="No se encontraron descuentos">
+
+                    <p:column
+                        headerText="Descuento"
+                        filterBy="#{descuento.nombre}"
+                        filterMatchMode="contains"
+                        filterPlaceholder="Buscar por nombre">
+
+                        <!-- TIPO ACTIVO -->
+                        <p:commandLink
+                            value="#{descuento.nombre}"
+                            action="#{modelo.seleccionarDescuentoDisponible(descuento)}"
+                            process="@this"
+                            update=":formProducto:tabsProducto:panelDescuentoSeleccionado :formProducto:tabsProducto:maximoDescuento :formProducto:growl"
+                            oncomplete="PF('dialogDescuentos').hide()"
+                            rendered="#{descuento.idTipoDescuento.activo}"
+                            style="display:block;
+                            width:100%;
+                            padding:8px 5px;
+                            color:#4e342e !important;
+                            text-decoration:none !important;
+                            cursor:pointer;"/>
+
+                        <!-- TIPO INACTIVO -->
+                        <h:outputText
+                            value="#{descuento.nombre}"
+                            rendered="#{!descuento.idTipoDescuento.activo}"
+                            style="display:block;
+                            width:100%;
+                            padding:8px 5px;
+                            color:#9e9e9e !important;
+                            opacity:0.60;
+                            cursor:not-allowed;"/>
+
+                    </p:column>
+
+
+                </p:dataTable>
+
+            </p:dialog>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
