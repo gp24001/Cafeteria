@@ -46,12 +46,12 @@
             <type>jar</type>
             <scope>test</scope>
         </dependency>
-        <!--PrimeFaces-->
+        <!--PrimeFaces (quitando el scope provided)-->
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>15.0.17</version>
-            <scope>provided</scope>
+
             <classifier>jakarta</classifier>
         </dependency>
            
@@ -84,7 +84,7 @@
                 <version>3.12.3</version>
             <configuration>
                 <installDirectory>
-                    C:\Users\jazmi\Downloads\openliberty-jakartaee11-26.0.0.8\wlp
+                   /usr/local/openliberty/wlp_26.0.0.9
                 </installDirectory>
                 <serverName>cafefeServer</serverName>
             </configuration>
