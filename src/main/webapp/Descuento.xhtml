@@ -145,7 +145,7 @@
                         filterable="false">
 
                         <h:outputText value="#{r.fechaInicio}">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/El_Salvador"/>
                         </h:outputText>
                     </p:column>
 
@@ -156,7 +156,7 @@
                             value="#{r.fechaFin}"
                             rendered="#{r.fechaFin != null}">
 
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/El_Salvador"/>
                         </h:outputText>
 
                         <h:outputText
