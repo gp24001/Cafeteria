@@ -26,9 +26,10 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- *
+ * Entidad JPA que representa asignación de categoría a producto y sus relaciones en la cafetería.
  * @author jazmi
  */
+/** Entidad JPA que representa asignación de categoría a producto y sus relaciones en la cafetería. */
 @Entity
 @Table(name = "producto_tipo_producto", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -46,7 +47,7 @@ public class ProductoTipoProducto implements Serializable {
     @Column(name = "activo")
     private Boolean activo;
     @Column(name = "fecha_creacion")
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
     @Size(max = 2147483647)
     @Column(name = "observaciones", length = 2147483647)
@@ -60,61 +61,121 @@ public class ProductoTipoProducto implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoProducto idTipoProducto;
 
+    /**
+     * Inicializa ProductoTipoProducto con los datos recibidos.
+     */
     public ProductoTipoProducto() {
     }
 
+    /**
+     * Inicializa ProductoTipoProducto con los datos recibidos.
+     * @param idProductoTipoProducto id producto tipo producto utilizado por la operación
+
+     */
     public ProductoTipoProducto(UUID idProductoTipoProducto) {
         this.idProductoTipoProducto = idProductoTipoProducto;
     }
 
+    /**
+     * Obtiene id producto tipo producto para la vista o la operación actual.
+     * @return id producto tipo producto actual
+     */
     public UUID getIdProductoTipoProducto() {
         return idProductoTipoProducto;
     }
 
+    /**
+     * Actualiza id producto tipo producto con el valor recibido.
+     * @param idProductoTipoProducto id producto tipo producto utilizado por la operación
+     */
     public void setIdProductoTipoProducto(UUID idProductoTipoProducto) {
         this.idProductoTipoProducto = idProductoTipoProducto;
     }
 
+    /**
+     * Obtiene activo para la vista o la operación actual.
+     * @return activo actual
+     */
     public Boolean getActivo() {
         return activo;
     }
 
+    /**
+     * Actualiza activo con el valor recibido.
+     * @param activo activo utilizado por la operación
+     */
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
 
+    /**
+     * Obtiene fecha creacion para la vista o la operación actual.
+     * @return fecha creacion actual
+     */
     public Date getFechaCreacion() {
         return fechaCreacion;
     }
 
+    /**
+     * Actualiza fecha creacion con el valor recibido.
+     * @param fechaCreacion fecha creacion utilizado por la operación
+     */
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
     
+    /**
+     * Obtiene observaciones para la vista o la operación actual.
+     * @return observaciones actual
+     */
     public String getObservaciones() {
         return observaciones;
     }
 
+    /**
+     * Actualiza observaciones con el valor recibido.
+     * @param observaciones observaciones utilizado por la operación
+     */
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Obtiene id producto para la vista o la operación actual.
+     * @return id producto actual
+     */
     public Producto getIdProducto() {
         return idProducto;
     }
 
+    /**
+     * Actualiza id producto con el valor recibido.
+     * @param idProducto identificador del producto
+     */
     public void setIdProducto(Producto idProducto) {
         this.idProducto = idProducto;
     }
 
+    /**
+     * Obtiene id tipo producto para la vista o la operación actual.
+     * @return id tipo producto actual
+     */
     public TipoProducto getIdTipoProducto() {
         return idTipoProducto;
     }
 
+    /**
+     * Actualiza id tipo producto con el valor recibido.
+     * @param idTipoProducto id tipo producto utilizado por la operación
+     */
     public void setIdTipoProducto(TipoProducto idTipoProducto) {
         this.idTipoProducto = idTipoProducto;
     }
 
+    /**
+     * Calcula el código hash a partir del identificador de la entidad.
+     * @return código hash derivado de la identidad de la entidad
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -122,6 +183,11 @@ public class ProductoTipoProducto implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara la identidad persistente de dos entidades mediante su identificador.
+     * @param object object utilizado por la operación
+     * @return true cuando se cumple la condición comprobada
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -135,6 +201,10 @@ public class ProductoTipoProducto implements Serializable {
         return true;
     }
 
+    /**
+     * Devuelve una representación textual que permite identificar la entidad.
+     * @return texto con el tipo y el identificador de la entidad
+     */
     @Override
     public String toString() {
         return "com.ppi115.cafefe.entity.ProductoTipoProducto[ idProductoTipoProducto=" + idProductoTipoProducto + " ]";

@@ -24,9 +24,10 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
- *
+ * Entidad JPA que representa detalle facturado de una orden y sus relaciones en la cafetería.
  * @author jazmi
  */
+/** Entidad JPA que representa detalle facturado de una orden y sus relaciones en la cafetería. */
 @Entity
 @Table(name = "factura_orden_producto", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -54,53 +55,105 @@ public class FacturaOrdenProducto implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private OrdenProducto idOrdenProducto;
 
+    /**
+     * Inicializa FacturaOrdenProducto con los datos recibidos.
+     */
     public FacturaOrdenProducto() {
     }
 
+    /**
+     * Inicializa FacturaOrdenProducto con los datos recibidos.
+     * @param idFacturaOrdenProducto id factura orden producto utilizado por la operación
+
+     */
     public FacturaOrdenProducto(UUID idFacturaOrdenProducto) {
         this.idFacturaOrdenProducto = idFacturaOrdenProducto;
     }
 
+    /**
+     * Obtiene id factura orden producto para la vista o la operación actual.
+     * @return id factura orden producto actual
+     */
     public UUID getIdFacturaOrdenProducto() {
         return idFacturaOrdenProducto;
     }
 
+    /**
+     * Actualiza id factura orden producto con el valor recibido.
+     * @param idFacturaOrdenProducto id factura orden producto utilizado por la operación
+     */
     public void setIdFacturaOrdenProducto(UUID idFacturaOrdenProducto) {
         this.idFacturaOrdenProducto = idFacturaOrdenProducto;
     }
 
+    /**
+     * Obtiene precio para la vista o la operación actual.
+     * @return precio actual
+     */
     public BigDecimal getPrecio() {
         return precio;
     }
 
+    /**
+     * Actualiza precio con el valor recibido.
+     * @param precio precio utilizado por la operación
+     */
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 
+    /**
+     * Obtiene observaciones para la vista o la operación actual.
+     * @return observaciones actual
+     */
     public String getObservaciones() {
         return observaciones;
     }
 
+    /**
+     * Actualiza observaciones con el valor recibido.
+     * @param observaciones observaciones utilizado por la operación
+     */
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Obtiene id factura para la vista o la operación actual.
+     * @return id factura actual
+     */
     public Factura getIdFactura() {
         return idFactura;
     }
 
+    /**
+     * Actualiza id factura con el valor recibido.
+     * @param idFactura id factura utilizado por la operación
+     */
     public void setIdFactura(Factura idFactura) {
         this.idFactura = idFactura;
     }
 
+    /**
+     * Obtiene id orden producto para la vista o la operación actual.
+     * @return id orden producto actual
+     */
     public OrdenProducto getIdOrdenProducto() {
         return idOrdenProducto;
     }
 
+    /**
+     * Actualiza id orden producto con el valor recibido.
+     * @param idOrdenProducto id orden producto utilizado por la operación
+     */
     public void setIdOrdenProducto(OrdenProducto idOrdenProducto) {
         this.idOrdenProducto = idOrdenProducto;
     }
 
+    /**
+     * Calcula el código hash a partir del identificador de la entidad.
+     * @return código hash derivado de la identidad de la entidad
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -108,6 +161,11 @@ public class FacturaOrdenProducto implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara la identidad persistente de dos entidades mediante su identificador.
+     * @param object object utilizado por la operación
+     * @return true cuando se cumple la condición comprobada
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -121,6 +179,10 @@ public class FacturaOrdenProducto implements Serializable {
         return true;
     }
 
+    /**
+     * Devuelve una representación textual que permite identificar la entidad.
+     * @return texto con el tipo y el identificador de la entidad
+     */
     @Override
     public String toString() {
         return "com.ppi115.cafefe.entity.FacturaOrdenProducto[ idFacturaOrdenProducto=" + idFacturaOrdenProducto + " ]";

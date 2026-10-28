@@ -14,6 +14,19 @@
     </properties>
     
     <dependencies>
+        <!-- Implementaciones para integración fuera del servidor Jakarta EE. -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>4.0.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.2.Final</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>
@@ -84,7 +97,7 @@
                 <version>3.12.3</version>
             <configuration>
                 <installDirectory>
-                   /usr/local/openliberty/wlp_26.0.0.9
+                   C:\Users\jazmi\Downloads\openliberty-jakartaee11-26.0.0.8\wlp
                 </installDirectory>
                 <serverName>cafefeServer</serverName>
             </configuration>
