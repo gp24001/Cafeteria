@@ -1,6 +1,7 @@
 package com.ppi115.cafefe.control;
 
 import com.ppi115.cafefe.entity.TipoDescuento;
+import com.ppi115.cafefe.control.DefaultDAO.DatosInvalidosException;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import jakarta.persistence.EntityManager;
-
+/** Pruebas de tipo descuento dao, con verificación de los resultados esperados. */
 
 public class TipoDescuentoDAOTest {
 
@@ -17,6 +18,11 @@ public class TipoDescuentoDAOTest {
             "8a4685fa-304d-48d5-b3fc-df98b513fea2"
     );
 
+    /**
+     * Construye un DAO con las dependencias simuladas utilizadas por las pruebas unitarias.
+     * @param em em utilizado por la operación
+     * @return resultado de la consulta u operación
+     */
     private TipoDescuentoDAO crearDAO(EntityManager em) {
         TipoDescuentoDAO dao = new TipoDescuentoDAO();
 
@@ -26,6 +32,11 @@ public class TipoDescuentoDAOTest {
 
             campo.setAccessible(true);
             campo.set(dao, em);
+            var validacion = DefaultDAO.class.getDeclaredField("validator");
+            validacion.setAccessible(true);
+            var validator = mock(jakarta.validation.Validator.class);
+            when(validator.validate(any())).thenReturn(java.util.Set.of());
+            validacion.set(dao, validator);
 
         } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
             throw new RuntimeException(e);
@@ -34,6 +45,9 @@ public class TipoDescuentoDAOTest {
         return dao;
     }
 
+    /**
+     * Verifica crear.
+     */
     @Test
     public void testCrear() {
         EntityManager em = mock(EntityManager.class);
@@ -49,6 +63,9 @@ public class TipoDescuentoDAOTest {
         verify(em).persist(tipoDescuento);
     }
 
+    /**
+     * Verifica modificar.
+     */
     @Test
     public void testModificar() {
         EntityManager em = mock(EntityManager.class);
@@ -64,6 +81,9 @@ public class TipoDescuentoDAOTest {
         verify(em).merge(tipoDescuento);
     }
 
+    /**
+     * Verifica eliminar.
+     */
     @Test
     public void testEliminar() {
         EntityManager em = mock(EntityManager.class);
@@ -83,6 +103,9 @@ public class TipoDescuentoDAOTest {
         verify(em).remove(tipoDescuento);
     }
 
+    /**
+     * Verifica find by id.
+     */
     @Test
     public void testFindById() {
         EntityManager em = mock(EntityManager.class);
@@ -104,6 +127,9 @@ public class TipoDescuentoDAOTest {
         verify(em).find(TipoDescuento.class, id);
     }
 
+    /**
+     * Verifica find all.
+     */
     @Test
     public void testFindAll() {
         EntityManager em = mock(EntityManager.class);
@@ -142,6 +168,9 @@ public class TipoDescuentoDAOTest {
         );
     }
 
+    /**
+     * Verifica find range.
+     */
     @Test
     public void testFindRange() {
         EntityManager em = mock(EntityManager.class);
@@ -182,6 +211,9 @@ public class TipoDescuentoDAOTest {
         verify(query).setMaxResults(10);
     }
 
+    /**
+     * Verifica contar.
+     */
     @Test
     public void testContar() {
         EntityManager em = mock(EntityManager.class);

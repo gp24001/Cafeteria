@@ -26,9 +26,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
+ * Entidad JPA que representa asignación de rol a empleado y sus relaciones en la cafetería.
  * @author jazmi
  */
+/** Entidad JPA que representa asignación de rol a empleado y sus relaciones en la cafetería. */
 @Entity
 @Table(name = "empleado_rol", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -59,69 +60,137 @@ public class EmpleadoRol implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmpleadoRol", fetch = FetchType.LAZY)
     private List<Orden> ordenList;
 
+    /**
+     * Inicializa EmpleadoRol con los datos recibidos.
+     */
     public EmpleadoRol() {
     }
 
+    /**
+     * Inicializa EmpleadoRol con los datos recibidos.
+     * @param idEmpleadoRol id empleado rol utilizado por la operación
+
+     */
     public EmpleadoRol(UUID idEmpleadoRol) {
         this.idEmpleadoRol = idEmpleadoRol;
     }
 
+    /**
+     * Obtiene id empleado rol para la vista o la operación actual.
+     * @return id empleado rol actual
+     */
     public UUID getIdEmpleadoRol() {
         return idEmpleadoRol;
     }
 
+    /**
+     * Actualiza id empleado rol con el valor recibido.
+     * @param idEmpleadoRol id empleado rol utilizado por la operación
+     */
     public void setIdEmpleadoRol(UUID idEmpleadoRol) {
         this.idEmpleadoRol = idEmpleadoRol;
     }
 
+    /**
+     * Obtiene activo para la vista o la operación actual.
+     * @return activo actual
+     */
     public Boolean getActivo() {
         return activo;
     }
 
+    /**
+     * Actualiza activo con el valor recibido.
+     * @param activo activo utilizado por la operación
+     */
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
 
+    /**
+     * Obtiene observaciones para la vista o la operación actual.
+     * @return observaciones actual
+     */
     public String getObservaciones() {
         return observaciones;
     }
 
+    /**
+     * Actualiza observaciones con el valor recibido.
+     * @param observaciones observaciones utilizado por la operación
+     */
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Obtiene id empleado para la vista o la operación actual.
+     * @return id empleado actual
+     */
     public Empleado getIdEmpleado() {
         return idEmpleado;
     }
 
+    /**
+     * Actualiza id empleado con el valor recibido.
+     * @param idEmpleado identificador del empleado
+     */
     public void setIdEmpleado(Empleado idEmpleado) {
         this.idEmpleado = idEmpleado;
     }
 
+    /**
+     * Obtiene id rol para la vista o la operación actual.
+     * @return id rol actual
+     */
     public Rol getIdRol() {
         return idRol;
     }
 
+    /**
+     * Actualiza id rol con el valor recibido.
+     * @param idRol id rol utilizado por la operación
+     */
     public void setIdRol(Rol idRol) {
         this.idRol = idRol;
     }
 
+    /**
+     * Obtiene factura list para la vista o la operación actual.
+     * @return factura list actual
+     */
     public List<Factura> getFacturaList() {
         return facturaList;
     }
 
+    /**
+     * Actualiza factura list con el valor recibido.
+     * @param facturaList factura list utilizado por la operación
+     */
     public void setFacturaList(List<Factura> facturaList) {
         this.facturaList = facturaList;
     }
 
+    /**
+     * Obtiene orden list para la vista o la operación actual.
+     * @return orden list actual
+     */
     public List<Orden> getOrdenList() {
         return ordenList;
     }
 
+    /**
+     * Actualiza orden list con el valor recibido.
+     * @param ordenList orden list utilizado por la operación
+     */
     public void setOrdenList(List<Orden> ordenList) {
         this.ordenList = ordenList;
     }
 
+    /**
+     * Calcula el código hash a partir del identificador de la entidad.
+     * @return código hash derivado de la identidad de la entidad
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -129,6 +198,11 @@ public class EmpleadoRol implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara la identidad persistente de dos entidades mediante su identificador.
+     * @param object object utilizado por la operación
+     * @return true cuando se cumple la condición comprobada
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -142,6 +216,10 @@ public class EmpleadoRol implements Serializable {
         return true;
     }
 
+    /**
+     * Devuelve una representación textual que permite identificar la entidad.
+     * @return texto con el tipo y el identificador de la entidad
+     */
     @Override
     public String toString() {
         return "com.ppi115.cafefe.entity.EmpleadoRol[ idEmpleadoRol=" + idEmpleadoRol + " ]";

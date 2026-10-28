@@ -25,9 +25,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
+ * Entidad JPA que representa característica configurable y sus relaciones en la cafetería.
  * @author jazmi
  */
+/** Entidad JPA que representa característica configurable y sus relaciones en la cafetería. */
 @Entity
 @Table(name = "caracteristica", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -58,66 +59,132 @@ public class Caracteristica implements Serializable {
     @OneToMany(mappedBy = "idCaracteristica", fetch = FetchType.LAZY)
     private List<ProductoCaracteristica> productoCaracteristicaList;
 
+    /**
+     * Inicializa Caracteristica con los datos recibidos.
+     */
     public Caracteristica() {
     }
 
+    /**
+     * Inicializa Caracteristica con los datos recibidos.
+     * @param idCaracteristica id caracteristica utilizado por la operación
+
+     */
     public Caracteristica(UUID idCaracteristica) {
         this.idCaracteristica = idCaracteristica;
     }
 
+    /**
+     * Inicializa Caracteristica con los datos recibidos.
+     * @param idCaracteristica id caracteristica utilizado por la operación
+     * @param nombre nombre usado para identificar el dato en los mensajes
+
+     */
     public Caracteristica(UUID idCaracteristica, String nombre) {
         this.idCaracteristica = idCaracteristica;
         this.nombre = nombre;
     }
 
+    /**
+     * Obtiene id caracteristica para la vista o la operación actual.
+     * @return id caracteristica actual
+     */
     public UUID getIdCaracteristica() {
         return idCaracteristica;
     }
 
+    /**
+     * Actualiza id caracteristica con el valor recibido.
+     * @param idCaracteristica id caracteristica utilizado por la operación
+     */
     public void setIdCaracteristica(UUID idCaracteristica) {
         this.idCaracteristica = idCaracteristica;
     }
 
+    /**
+     * Obtiene nombre para la vista o la operación actual.
+     * @return nombre actual
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Actualiza nombre con el valor recibido.
+     * @param nombre nombre usado para identificar el dato en los mensajes
+     */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
+    /**
+     * Obtiene activo para la vista o la operación actual.
+     * @return activo actual
+     */
     public Boolean getActivo() {
         return activo;
     }
 
+    /**
+     * Actualiza activo con el valor recibido.
+     * @param activo activo utilizado por la operación
+     */
     public void setActivo(Boolean activo) {
         this.activo = activo;
     }
 
+    /**
+     * Obtiene observaciones para la vista o la operación actual.
+     * @return observaciones actual
+     */
     public String getObservaciones() {
         return observaciones;
     }
 
+    /**
+     * Actualiza observaciones con el valor recibido.
+     * @param observaciones observaciones utilizado por la operación
+     */
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Obtiene id tipo caracteristica para la vista o la operación actual.
+     * @return id tipo caracteristica actual
+     */
     public TipoCaracteristica getIdTipoCaracteristica() {
         return idTipoCaracteristica;
     }
 
+    /**
+     * Actualiza id tipo caracteristica con el valor recibido.
+     * @param idTipoCaracteristica id tipo caracteristica utilizado por la operación
+     */
     public void setIdTipoCaracteristica(TipoCaracteristica idTipoCaracteristica) {
         this.idTipoCaracteristica = idTipoCaracteristica;
     }
 
+    /**
+     * Obtiene producto caracteristica list para la vista o la operación actual.
+     * @return producto caracteristica list actual
+     */
     public List<ProductoCaracteristica> getProductoCaracteristicaList() {
         return productoCaracteristicaList;
     }
 
+    /**
+     * Actualiza producto caracteristica list con el valor recibido.
+     * @param productoCaracteristicaList producto caracteristica list utilizado por la operación
+     */
     public void setProductoCaracteristicaList(List<ProductoCaracteristica> productoCaracteristicaList) {
         this.productoCaracteristicaList = productoCaracteristicaList;
     }
 
+    /**
+     * Calcula el código hash a partir del identificador de la entidad.
+     * @return código hash derivado de la identidad de la entidad
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,6 +192,11 @@ public class Caracteristica implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara la identidad persistente de dos entidades mediante su identificador.
+     * @param object object utilizado por la operación
+     * @return true cuando se cumple la condición comprobada
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -138,6 +210,10 @@ public class Caracteristica implements Serializable {
         return true;
     }
 
+    /**
+     * Devuelve una representación textual que permite identificar la entidad.
+     * @return texto con el tipo y el identificador de la entidad
+     */
     @Override
     public String toString() {
         return "com.ppi115.cafefe.entity.Caracteristica[ idCaracteristica=" + idCaracteristica + " ]";

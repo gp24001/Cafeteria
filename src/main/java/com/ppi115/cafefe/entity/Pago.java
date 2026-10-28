@@ -26,9 +26,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
+ * Entidad JPA que representa pago y sus relaciones en la cafetería.
  * @author jazmi
  */
+/** Entidad JPA que representa pago y sus relaciones en la cafetería. */
 @Entity
 @Table(name = "pago", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -55,53 +56,105 @@ public class Pago implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPago", fetch = FetchType.LAZY)
     private List<PagoDetalle> pagoDetalleList;
 
+    /**
+     * Inicializa Pago con los datos recibidos.
+     */
     public Pago() {
     }
 
+    /**
+     * Inicializa Pago con los datos recibidos.
+     * @param idPago id pago utilizado por la operación
+
+     */
     public Pago(UUID idPago) {
         this.idPago = idPago;
     }
 
+    /**
+     * Obtiene id pago para la vista o la operación actual.
+     * @return id pago actual
+     */
     public UUID getIdPago() {
         return idPago;
     }
 
+    /**
+     * Actualiza id pago con el valor recibido.
+     * @param idPago id pago utilizado por la operación
+     */
     public void setIdPago(UUID idPago) {
         this.idPago = idPago;
     }
 
+    /**
+     * Obtiene estado para la vista o la operación actual.
+     * @return estado actual
+     */
     public String getEstado() {
         return estado;
     }
 
+    /**
+     * Actualiza estado con el valor recibido.
+     * @param estado estado utilizado por la operación
+     */
     public void setEstado(String estado) {
         this.estado = estado;
     }
 
+    /**
+     * Obtiene observaciones para la vista o la operación actual.
+     * @return observaciones actual
+     */
     public String getObservaciones() {
         return observaciones;
     }
 
+    /**
+     * Actualiza observaciones con el valor recibido.
+     * @param observaciones observaciones utilizado por la operación
+     */
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Obtiene id factura para la vista o la operación actual.
+     * @return id factura actual
+     */
     public Factura getIdFactura() {
         return idFactura;
     }
 
+    /**
+     * Actualiza id factura con el valor recibido.
+     * @param idFactura id factura utilizado por la operación
+     */
     public void setIdFactura(Factura idFactura) {
         this.idFactura = idFactura;
     }
 
+    /**
+     * Obtiene pago detalle list para la vista o la operación actual.
+     * @return pago detalle list actual
+     */
     public List<PagoDetalle> getPagoDetalleList() {
         return pagoDetalleList;
     }
 
+    /**
+     * Actualiza pago detalle list con el valor recibido.
+     * @param pagoDetalleList pago detalle list utilizado por la operación
+     */
     public void setPagoDetalleList(List<PagoDetalle> pagoDetalleList) {
         this.pagoDetalleList = pagoDetalleList;
     }
 
+    /**
+     * Calcula el código hash a partir del identificador de la entidad.
+     * @return código hash derivado de la identidad de la entidad
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -109,6 +162,11 @@ public class Pago implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara la identidad persistente de dos entidades mediante su identificador.
+     * @param object object utilizado por la operación
+     * @return true cuando se cumple la condición comprobada
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -122,6 +180,10 @@ public class Pago implements Serializable {
         return true;
     }
 
+    /**
+     * Devuelve una representación textual que permite identificar la entidad.
+     * @return texto con el tipo y el identificador de la entidad
+     */
     @Override
     public String toString() {
         return "com.ppi115.cafefe.entity.Pago[ idPago=" + idPago + " ]";

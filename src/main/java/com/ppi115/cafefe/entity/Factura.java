@@ -29,9 +29,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- *
+ * Entidad JPA que representa factura y sus relaciones en la cafetería.
  * @author jazmi
  */
+/** Entidad JPA que representa factura y sus relaciones en la cafetería. */
 @Entity
 @Table(name = "factura", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -69,85 +70,169 @@ public class Factura implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private EmpleadoRol idEmpleadoRol;
 
+    /**
+     * Inicializa Factura con los datos recibidos.
+     */
     public Factura() {
     }
 
+    /**
+     * Inicializa Factura con los datos recibidos.
+     * @param idFactura id factura utilizado por la operación
+
+     */
     public Factura(UUID idFactura) {
         this.idFactura = idFactura;
     }
 
+    /**
+     * Obtiene id factura para la vista o la operación actual.
+     * @return id factura actual
+     */
     public UUID getIdFactura() {
         return idFactura;
     }
 
+    /**
+     * Actualiza id factura con el valor recibido.
+     * @param idFactura id factura utilizado por la operación
+     */
     public void setIdFactura(UUID idFactura) {
         this.idFactura = idFactura;
     }
 
+    /**
+     * Obtiene cliente para la vista o la operación actual.
+     * @return cliente actual
+     */
     public String getCliente() {
         return cliente;
     }
 
+    /**
+     * Actualiza cliente con el valor recibido.
+     * @param cliente cliente utilizado por la operación
+     */
     public void setCliente(String cliente) {
         this.cliente = cliente;
     }
 
+    /**
+     * Obtiene fecha facturacion para la vista o la operación actual.
+     * @return fecha facturacion actual
+     */
     public Date getFechaFacturacion() {
         return fechaFacturacion;
     }
 
+    /**
+     * Actualiza fecha facturacion con el valor recibido.
+     * @param fechaFacturacion fecha facturacion utilizado por la operación
+     */
     public void setFechaFacturacion(Date fechaFacturacion) {
         this.fechaFacturacion = fechaFacturacion;
     }
 
+    /**
+     * Obtiene estado para la vista o la operación actual.
+     * @return estado actual
+     */
     public String getEstado() {
         return estado;
     }
 
+    /**
+     * Actualiza estado con el valor recibido.
+     * @param estado estado utilizado por la operación
+     */
     public void setEstado(String estado) {
         this.estado = estado;
     }
 
+    /**
+     * Obtiene observaciones para la vista o la operación actual.
+     * @return observaciones actual
+     */
     public String getObservaciones() {
         return observaciones;
     }
 
+    /**
+     * Actualiza observaciones con el valor recibido.
+     * @param observaciones observaciones utilizado por la operación
+     */
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
 
+    /**
+     * Obtiene pago list para la vista o la operación actual.
+     * @return pago list actual
+     */
     public List<Pago> getPagoList() {
         return pagoList;
     }
 
+    /**
+     * Actualiza pago list con el valor recibido.
+     * @param pagoList pago list utilizado por la operación
+     */
     public void setPagoList(List<Pago> pagoList) {
         this.pagoList = pagoList;
     }
 
+    /**
+     * Obtiene factura orden producto list para la vista o la operación actual.
+     * @return factura orden producto list actual
+     */
     public List<FacturaOrdenProducto> getFacturaOrdenProductoList() {
         return facturaOrdenProductoList;
     }
 
+    /**
+     * Actualiza factura orden producto list con el valor recibido.
+     * @param facturaOrdenProductoList factura orden producto list utilizado por la operación
+     */
     public void setFacturaOrdenProductoList(List<FacturaOrdenProducto> facturaOrdenProductoList) {
         this.facturaOrdenProductoList = facturaOrdenProductoList;
     }
 
+    /**
+     * Obtiene id caja para la vista o la operación actual.
+     * @return id caja actual
+     */
     public Caja getIdCaja() {
         return idCaja;
     }
 
+    /**
+     * Actualiza id caja con el valor recibido.
+     * @param idCaja id caja utilizado por la operación
+     */
     public void setIdCaja(Caja idCaja) {
         this.idCaja = idCaja;
     }
 
+    /**
+     * Obtiene id empleado rol para la vista o la operación actual.
+     * @return id empleado rol actual
+     */
     public EmpleadoRol getIdEmpleadoRol() {
         return idEmpleadoRol;
     }
 
+    /**
+     * Actualiza id empleado rol con el valor recibido.
+     * @param idEmpleadoRol id empleado rol utilizado por la operación
+     */
     public void setIdEmpleadoRol(EmpleadoRol idEmpleadoRol) {
         this.idEmpleadoRol = idEmpleadoRol;
     }
 
+    /**
+     * Calcula el código hash a partir del identificador de la entidad.
+     * @return código hash derivado de la identidad de la entidad
+     */
     @Override
     public int hashCode() {
         int hash = 0;
@@ -155,6 +240,11 @@ public class Factura implements Serializable {
         return hash;
     }
 
+    /**
+     * Compara la identidad persistente de dos entidades mediante su identificador.
+     * @param object object utilizado por la operación
+     * @return true cuando se cumple la condición comprobada
+     */
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -168,6 +258,10 @@ public class Factura implements Serializable {
         return true;
     }
 
+    /**
+     * Devuelve una representación textual que permite identificar la entidad.
+     * @return texto con el tipo y el identificador de la entidad
+     */
     @Override
     public String toString() {
         return "com.ppi115.cafefe.entity.Factura[ idFactura=" + idFactura + " ]";

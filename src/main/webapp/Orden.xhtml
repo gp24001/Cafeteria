@@ -1,171 +1,251 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
-    xmlns:ui="jakarta.faces.facelets" xmlns:p="primefaces" xmlns:bo="jakarta.faces.composite/botones"
-    xmlns:ta="jakarta.faces.composite/tablas" template="/WEB-INF/templates/general.xhtml">
-
-    <ui:param name="modelo" value="#{ordenModel}" />
-    <ui:param name="tituloPagina" value="Orden" />
-
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="jakarta.faces.html"
+    xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets"
+    xmlns:p="primefaces"
+    xmlns:bo="jakarta.faces.composite/botones"
+    xmlns:ta="jakarta.faces.composite/tablas"
+    template="/WEB-INF/templates/general.xhtml">
+    <ui:param name="modelo" value="#{ordenModel}"/>
+    <ui:param name="tituloPagina" value="Orden"/>
     <ui:define name="contenido">
         <h:form id="formTabla">
-
-            <p:growl id="growl" showDetail="false" life="5000" />
-
+            <p:growl id="growl" showDetail="false" life="6000"/>
             <div class="crud-botones">
-                <bo:botonesArriba modelo="#{modelo}" />
+                <bo:botonesArriba modelo="#{modelo}"/>
             </div>
-
-            <!-- FORMULARIO (pestañas Generalidades / Productos) -->
-            <h:panelGroup id="panelFormulario" layout="block" rendered="#{modelo.estado != 'NINGUNO'}"
+            <h:panelGroup
+                id="panelFormulario"
+                layout="block"
+                rendered="#{modelo.estado != 'NINGUNO'}"
                 styleClass="formularioBloque">
-
-                <h2 class="crud-subtitulo">Datos de la Orden</h2>
-
+                <h2 class="crud-subtitulo">Datos de la orden</h2>
                 <p:tabView id="tabs" activeIndex="#{modelo.tabActivo}">
-                    <p:ajax event="tabChange" />
-
+                    <p:ajax event="tabChange" process="@this" update=":formTabla:panelDescuentos"/>
                     <p:tab title="Generalidades">
-                        <div class="formGrid">
-
+                        <!-- Al agregar productos se procesa este panel para conservar empleado y fecha. -->
+                        <h:panelGroup id="datosGenerales" layout="block" styleClass="formGrid">
                             <div class="campoGrupo">
-                                <p:outputLabel for="id" value="ID:" />
-                                <p:inputText id="id" value="#{modelo.registro.idOrden}" readonly="true"
-                                    styleClass="inputCompleto" />
+                                <p:outputLabel for="id" value="ID:"/>
+                                <p:inputText
+                                    id="id"
+                                    value="#{modelo.registro.idOrden}"
+                                    readonly="true"
+                                    styleClass="inputCompleto"/>
                             </div>
-
                             <div class="campoGrupo">
-                                <p:outputLabel for="empleado" value="Empleado (camarero):" />
-                                <p:selectOneMenu id="empleado" value="#{modelo.registro.idEmpleadoRol}"
-                                    converter="#{empleadoRolConverter}" required="true"
-                                    requiredMessage="Debe seleccionar un empleado" filter="true"
-                                    filterMatchMode="contains">
-                                    <f:selectItem itemLabel="Seleccione un empleado" itemValue="#{null}"
-                                        noSelectionOption="true" />
-                                    <f:selectItems value="#{modelo.camareros}" var="e" itemValue="#{e}"
-                                        itemLabel="#{e.idEmpleado.nombre} #{e.idEmpleado.apellido} (#{e.idRol.nombre})" />
+                                <p:outputLabel for="empleado" value="Empleado (camarero):"/>
+                                <p:selectOneMenu
+                                    id="empleado"
+                                    value="#{modelo.idEmpleadoRolSeleccionado}"
+                                    converter="uuidConverter"
+                                    required="true"
+                                    requiredMessage="Debe seleccionar un camarero"
+                                    disabled="#{modelo.estado == 'EDITAR'}"
+                                    filter="true"
+                                    filterMatchMode="contains"
+                                    filterPlaceholder="Buscar camarero..."
+                                    height="88"
+                                    panelStyleClass="buscadorCompacto">
+                                    <f:selectItem
+                                        itemLabel="Buscar o seleccionar camarero..."
+                                        itemValue="#{null}"
+                                        noSelectionOption="true"/>
+                                    <f:selectItems
+                                        value="#{modelo.camareros}"
+                                        var="e"
+                                        itemValue="#{e.idEmpleadoRol}"
+                                        itemLabel="#{e.idEmpleado.nombre} #{e.idEmpleado.apellido}"/>
+                                    <p:ajax process="@this"/>
                                 </p:selectOneMenu>
                             </div>
-
                             <div class="campoGrupo">
-                                <p:outputLabel for="fecha" value="Fecha de orden:" />
-                                <p:datePicker id="fecha" value="#{modelo.registro.fechaOrden}" showTime="true"
-                                    showSeconds="true" pattern="dd/MM/yyyy HH:mm:ss" required="true"
-                                    requiredMessage="La fecha es obligatoria" styleClass="inputCompleto" />
+                                <p:outputLabel for="fecha" value="Fecha de orden:"/>
+                                <p:datePicker
+                                    id="fecha"
+                                    value="#{modelo.registro.fechaOrden}"
+                                    showTime="true"
+                                    pattern="dd/MM/yyyy HH:mm"
+                                    hourFormat="24"
+                                    timeZone="America/El_Salvador"
+                                    required="true"
+                                    requiredMessage="La fecha es obligatoria"
+                                    disabled="#{modelo.estado == 'EDITAR'}"
+                                    styleClass="inputCompleto">
+                                    <p:ajax
+                                        event="dateSelect"
+                                        listener="#{modelo.cambiarFecha}"
+                                        process="@this"
+                                        update=":formTabla:tabs:tablaLineas :formTabla:panelDescuentos :formTabla:resumenTotal"/>
+                                    <p:ajax
+                                        event="change"
+                                        listener="#{modelo.cambiarFecha}"
+                                        process="@this"
+                                        update=":formTabla:tabs:tablaLineas :formTabla:panelDescuentos :formTabla:resumenTotal"/>
+                                </p:datePicker>
                             </div>
-
                             <div class="campoGrupo">
-                                <p:outputLabel for="observacion" value="Observación:" />
-                                <p:inputText id="observacion" value="#{modelo.registro.observacion}"
-                                    styleClass="inputCompleto" />
+                                <p:outputLabel for="observacion" value="Observación:"/>
+                                <p:inputTextarea
+                                    id="observacion"
+                                    value="#{modelo.registro.observacion}"
+                                    rows="3"
+                                    styleClass="inputCompleto"/>
                             </div>
-
-                        </div>
+                        </h:panelGroup>
                     </p:tab>
-
                     <p:tab title="Productos">
-
                         <div class="formGrid">
                             <div class="campoGrupo">
-                                <p:outputLabel for="productoSel" value="Producto:" />
-                                <p:selectOneMenu id="productoSel" value="#{modelo.productoSeleccionado}"
-                                    converter="#{productoConverter}" filter="true" filterMatchMode="contains">
-                                    <f:selectItem itemLabel="Seleccione un producto" itemValue="#{null}"
-                                        noSelectionOption="true" />
-                                    <f:selectItems value="#{modelo.productos}" var="pr" itemValue="#{pr}"
-                                        itemLabel="#{pr.nombre} - #{pr.precioSugerido} $" />
+                                <p:outputLabel for="productoSel" value="Producto:"/>
+                                <p:selectOneMenu
+                                    id="productoSel"
+                                    value="#{modelo.idProductoSeleccionado}"
+                                    converter="uuidConverter"
+                                    disabled="#{modelo.estado == 'EDITAR'}"
+                                    filter="true"
+                                    filterMatchMode="contains"
+                                    filterPlaceholder="Buscar producto..."
+                                    height="88"
+                                    panelStyleClass="buscadorCompacto">
+                                    <f:selectItem
+                                        itemLabel="Buscar o seleccionar producto..."
+                                        itemValue="#{null}"
+                                        noSelectionOption="true"/>
+                                    <f:selectItems
+                                        value="#{modelo.productos}"
+                                        var="pr"
+                                        itemValue="#{pr.idProducto}"
+                                        itemLabel="#{pr.nombre} - $#{pr.precioSugerido}"/>
                                 </p:selectOneMenu>
                             </div>
-                            <div class="campoGrupo">
-                                <p:commandButton value="Agregar producto" actionListener="#{modelo.agregarProducto}"
-                                    process="@this @previous" update="@form" />
-                            </div>
+                            <p:commandButton
+                                value="Agregar producto"
+                                actionListener="#{modelo.agregarProducto}"
+                                disabled="#{modelo.estado == 'EDITAR'}"
+                                process="@this :formTabla:tabs:datosGenerales :formTabla:tabs:productoSel"
+                                update="@form"/>
                         </div>
-
-                        <div class="crud-botones">
-                            <p:commandButton value="Descuentos aplicables" actionListener="#{modelo.cargarDescuentos}"
-                                process="@this" update="@form" oncomplete="PF('dlgDescuentos').show()" />
-                        </div>
-
-                        <p:dataTable id="tablaLineas" var="l" value="#{modelo.lineas}"
-                            emptyMessage="No se encontraron registros" styleClass="tablaGeneral">
-                            <p:column headerText="ID">
-                                <h:outputText value="#{l.idOrdenProducto}" />
-                            </p:column>
+                        <p>Seleccione una fila para consultar los descuentos de ese producto.</p>
+                        <p:dataTable
+                            id="tablaLineas"
+                            var="l"
+                            value="#{modelo.lineas}"
+                            selectionMode="single"
+                            selection="#{modelo.lineaSeleccionada}"
+                            rowKey="#{l.idOrdenProducto}"
+                            emptyMessage="Agregue un producto a la orden"
+                            styleClass="tablaGeneral">
+                            <p:ajax
+                                event="rowSelect"
+                                listener="#{modelo.seleccionarLinea}"
+                                process="@this :formTabla:tabs:datosGenerales"
+                                update=":formTabla:panelDescuentos :formTabla:growl"/>
                             <p:column headerText="Producto">
-                                <h:outputText value="#{l.idProducto.nombre}" />
+                                <h:outputText value="#{l.idProducto.nombre}"/>
                             </p:column>
-                            <p:column headerText="Precio">
+                            <p:column headerText="Importe">
                                 <h:outputText value="#{l.precio}">
-                                    <f:convertNumber type="currency" currencySymbol="$" />
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Observaciones">
-                                <h:outputText value="#{l.observaciones}" />
+                            <p:column headerText="Descuentos y observaciones">
+                                <h:outputText value="#{l.observaciones}"/>
                             </p:column>
                             <p:column headerText="Quitar" style="width:6rem">
-                                <p:commandButton icon="pi pi-trash" actionListener="#{modelo.quitarLinea(l)}"
-                                    process="@this" update="@form" />
+                                <p:commandButton
+                                    icon="pi pi-trash"
+                                    title="Quitar producto"
+                                    action="#{modelo.quitarLinea(l)}"
+                                    disabled="#{modelo.estado == 'EDITAR'}"
+                                    process="@this :formTabla:tabs:datosGenerales"
+                                    update="@form"/>
                             </p:column>
                         </p:dataTable>
-
                     </p:tab>
-
                 </p:tabView>
-
-                <p:dialog id="dlgDescuentos" widgetVar="dlgDescuentos" header="Descuentos aplicables" modal="true"
-                    resizable="false" width="450">
-
-                    <h:panelGroup rendered="#{empty modelo.descuentosAplicables}">
-                        <p>No hay descuentos aplicables a los productos de esta orden en la fecha indicada.</p>
-                    </h:panelGroup>
-
-                    <h:panelGroup rendered="#{not empty modelo.descuentosAplicables}">
-                        <p:selectOneMenu id="descuentoSel" value="#{modelo.descuentoSeleccionado}"
-                            converter="#{descuentoConverter}">
-                            <f:selectItem itemLabel="Seleccione un descuento" itemValue="#{null}"
-                                noSelectionOption="true" />
-                            <f:selectItems value="#{modelo.descuentosAplicables}" var="d" itemValue="#{d}"
-                                itemLabel="#{d.nombre}" />
-                        </p:selectOneMenu>
-                        <p:commandButton value="Aplicar" actionListener="#{modelo.aplicarDescuento}"
-                            process="@this @previous" update="@form" oncomplete="PF('dlgDescuentos').hide()" />
-                    </h:panelGroup>
-
-                </p:dialog>
-
-            </h:panelGroup>
-
-            <!-- TABLA -->
-            <h:panelGroup id="panelTabla" layout="block" rendered="#{modelo.estado == 'NINGUNO'}"
-                styleClass="tablaContenedor">
-
-                <ta:tablaGeneral modelo="#{modelo}" filas="5" opcionesFilas="2,5,10,20">
-
-                    <p:column headerText="ID" filterable="false">
-                        <h:outputText value="#{r.idOrden}" />
-                    </p:column>
-
-                    <p:column headerText="Empleado" filterable="false">
+                <!-- La selección es de una línea, no de todos los productos de la orden. -->
+                <h:panelGroup id="panelDescuentos" layout="block">
+                    <h:panelGroup
+                        layout="block"
+                        rendered="#{modelo.estado == 'NUEVO' and modelo.tabActivo == 1 and modelo.lineaSeleccionada != null}">
                         <h:outputText
-                            value="#{r.idEmpleadoRol.idEmpleado.nombre} #{r.idEmpleadoRol.idEmpleado.apellido} (#{r.idEmpleadoRol.idRol.nombre})" />
+                            styleClass="seleccionProducto"
+                            value="#{modelo.lineaSeleccionada.idProducto.nombre}"/>
+                        <h:panelGroup rendered="#{empty modelo.descuentosAplicables}">
+                            <p>Este producto no tiene descuentos disponibles para la fecha de la orden.</p>
+                        </h:panelGroup>
+                        <h:panelGroup
+                            layout="block"
+                            styleClass="formGrid"
+                            rendered="#{not empty modelo.descuentosAplicables}">
+                            <div class="campoGrupo">
+                                <p:outputLabel for="descuentoSel" value="Descuento del producto:"/>
+                                <p:selectOneMenu
+                                    id="descuentoSel"
+                                    value="#{modelo.idDescuentoSeleccionado}"
+                                    converter="uuidConverter"
+                                    filter="true"
+                                    filterMatchMode="contains"
+                                    filterPlaceholder="Buscar descuento..."
+                                    height="88"
+                                    panelStyleClass="buscadorCompacto">
+                                    <f:selectItem
+                                        itemLabel="Buscar o seleccionar descuento..."
+                                        itemValue="#{null}"
+                                        noSelectionOption="true"/>
+                                    <f:selectItems
+                                        value="#{modelo.descuentosAplicables}"
+                                        var="d"
+                                        itemValue="#{d.idDescuento}"
+                                        itemLabel="#{d.nombre}"/>
+                                </p:selectOneMenu>
+                                <h:outputText value="La fecha de la orden se comprueba al aplicar el descuento."/>
+                            </div>
+                            <p:commandButton
+                                value="Aplicar a este producto"
+                                actionListener="#{modelo.aplicarDescuento}"
+                                process="@this :formTabla:descuentoSel :formTabla:tabs:datosGenerales"
+                                update=":formTabla:tabs:tablaLineas :formTabla:growl :formTabla:resumenTotal"/>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup id="resumenTotal" layout="block" styleClass="seleccionProducto">
+                    <h:outputText value="Total: "/>
+                    <h:outputText value="#{modelo.total}">
+                        <f:convertNumber type="currency" currencySymbol="$"/>
+                    </h:outputText>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup
+                id="panelTabla"
+                layout="block"
+                rendered="#{modelo.estado == 'NINGUNO'}"
+                styleClass="tablaContenedor">
+                <ta:tablaGeneral modelo="#{modelo}" filas="5" opcionesFilas="2,5,10,20">
+                    <p:column headerText="ID" filterable="false">
+                        <h:outputText value="#{r.idOrden}"/>
                     </p:column>
-
+                    <p:column headerText="Camarero" filterable="false">
+                        <h:outputText
+                            value="#{r.idEmpleadoRol.idEmpleado.nombre} #{r.idEmpleadoRol.idEmpleado.apellido}"/>
+                    </p:column>
                     <p:column headerText="Fecha" filterable="false">
                         <h:outputText value="#{r.fechaOrden}">
-                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/El_Salvador" />
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/El_Salvador"/>
                         </h:outputText>
                     </p:column>
-
-                    <p:column headerText="Observación" field="observacion" filterBy="#{r.observacion}"
-                        filterMatchMode="contains" filterPlaceholder="Buscar por observación">
-                        <h:outputText value="#{r.observacion}" />
+                    <p:column
+                        headerText="Observación"
+                        field="observacion"
+                        filterBy="#{r.observacion}"
+                        filterMatchMode="contains">
+                        <h:outputText value="#{r.observacion}"/>
                     </p:column>
-
                 </ta:tablaGeneral>
-
             </h:panelGroup>
-
         </h:form>
     </ui:define>
-
 </ui:composition>
