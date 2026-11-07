@@ -6,6 +6,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.List;
+import java.util.UUID;
 
 /** Acceso a datos de línea de producto de una orden. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
 @Stateless

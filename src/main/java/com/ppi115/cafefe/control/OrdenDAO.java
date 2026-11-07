@@ -131,7 +131,7 @@ public class OrdenDAO extends DefaultDAO<Orden> {
     }
 
     /** Borra primero las líneas de la orden y luego la orden. */
-    @Override
+    @Override   
     public void eliminar(Object id) throws IllegalArgumentException {
         try {
             if (id == null) {
@@ -145,6 +145,7 @@ public class OrdenDAO extends DefaultDAO<Orden> {
             throw new DatosInvalidosException("No se pudo consultar la información solicitada", e);
         }
     }
+
 
     /**
      * Comprueba las restricciones y las reglas de la entidad antes de escribir en la base de datos.
@@ -224,4 +225,16 @@ public class OrdenDAO extends DefaultDAO<Orden> {
             }
         }
     }
+
+    /* REST
+       Obtiene las órdenes registradas por un EmpleadoRol específico
+    */
+    public List<Orden> findByEmpleadoRol(UUID idEmpleadoRol) {
+        return em.createQuery(
+                "SELECT o FROM Orden o WHERE o.idEmpleadoRol.idEmpleadoRol = :idEmpleadoRol ORDER BY o.fechaOrden DESC", 
+                Orden.class)
+                 .setParameter("idEmpleadoRol", idEmpleadoRol)
+                 .getResultList();
+    }
+
 }

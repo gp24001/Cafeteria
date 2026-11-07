@@ -34,8 +34,6 @@
             <scope>provided</scope>
         </dependency>
         
-    <!--  -->
-    
         <!--vDriver de PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
