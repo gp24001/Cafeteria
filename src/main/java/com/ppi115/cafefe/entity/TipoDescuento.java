@@ -2,6 +2,7 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -170,6 +171,7 @@ public class TipoDescuento implements Serializable {
      * Obtiene descuento list para la vista o la operación actual.
      * @return descuento list actual
      */
+    @JsonbTransient
     public List<Descuento> getDescuentoList() {
         return descuentoList;
     }

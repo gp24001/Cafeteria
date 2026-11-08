@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets" xmlns:p="primefaces">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets" xmlns:p="primefaces" xmlns:f="jakarta.faces.core">
+    <f:metadata><ui:insert name="metadata"/></f:metadata>
     <h:head>
         <title>CAFEFE</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/general.css?v=20261027-2"/>
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/general.css?v=20261107-3"/>
     </h:head>
     <h:body>
         <div class="general">
@@ -18,17 +19,25 @@
                 <!-- CATALOGO -->
                 <div class="catalogo">
                     <h:form id="formMenu">
-                        <p:menuButton id="menuCatalogo" value="Catálogo" maxHeight="45vh" collision="fit">
-                            <p:menuitem value="Empleado" url="Empleado.jsf"/>
-                            <p:menuitem value="Rol" url="Rol.jsf"/>
-                            <p:menuitem value="Característica" url="Caracteristica.jsf"/>
-                            <p:menuitem value="Producto" url="Producto.jsf"/>
-                            <p:menuitem value="Descuento" url="Descuento.jsf"/>
-                            <p:menuitem value="Orden" url="Orden.jsf"/>
-                            <p:menuitem value="TipoCaracterística" url="TipoCaracteristica.jsf"/>
-                            <p:menuitem value="TipoProducto" url="TipoProducto.jsf"/>
-                            <p:menuitem value="TipoDescuento" url="TipoDescuento.jsf"/>
+                        <p:menuButton id="menuCatalogo" value="Catálogo" maxHeight="45vh" collision="fit"
+                                      rendered="#{accesoModel.permite('Orden') or accesoModel.permite('Factura') or accesoModel.permite('Empleado')}">
+                            <p:menuitem value="Empleado" url="Empleado.jsf" rendered="#{accesoModel.permite('Empleado')}"/>
+                            <p:menuitem value="Rol" url="Rol.jsf" rendered="#{accesoModel.permite('Rol')}"/>
+                            <p:menuitem value="Característica" url="Caracteristica.jsf" rendered="#{accesoModel.permite('Caracteristica')}"/>
+                            <p:menuitem value="Producto" url="Producto.jsf" rendered="#{accesoModel.permite('Producto')}"/>
+                            <p:menuitem value="Descuento" url="Descuento.jsf" rendered="#{accesoModel.permite('Descuento')}"/>
+                            <p:menuitem value="Orden" url="Orden.jsf" rendered="#{accesoModel.permite('Orden')}"/>
+                            <p:menuitem value="TipoCaracterística" url="TipoCaracteristica.jsf" rendered="#{accesoModel.permite('TipoCaracteristica')}"/>
+                            <p:menuitem value="TipoProducto" url="TipoProducto.jsf" rendered="#{accesoModel.permite('TipoProducto')}"/>
+                            <p:menuitem value="TipoDescuento" url="TipoDescuento.jsf" rendered="#{accesoModel.permite('TipoDescuento')}"/>
+                            <p:menuitem value="Caja" url="Caja.jsf" rendered="#{accesoModel.permite('Caja')}"/>
+                            <p:menuitem value="Facturación y cobros" url="Factura.jsf" rendered="#{accesoModel.permite('Factura')}"/>
                         </p:menuButton>
+                        <h:panelGroup rendered="#{accesoModel.autenticado}" layout="block" styleClass="sesionUsuario">
+                            <h:outputText value="#{accesoModel.nombreEmpleado}"/>
+                            <p:commandButton value="Cerrar sesión" action="#{accesoModel.salir}"
+                                             ajax="false" process="@this" immediate="true"/>
+                        </h:panelGroup>
                     </h:form>
                 </div>
             </aside>

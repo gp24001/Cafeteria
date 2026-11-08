@@ -11,7 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Stateless
-@LocalBean 
+@LocalBean
 public class PagoDetalleDAO extends DefaultDAO<PagoDetalle> {
 
     @PersistenceContext(unitName = "Cafefe-PU")
@@ -30,11 +30,23 @@ public class PagoDetalleDAO extends DefaultDAO<PagoDetalle> {
         Obtiene las formas de pago y montos parciales aplicados a un Pago
      */
     public List<PagoDetalle> findByPago(UUID idPago) {
-        return em.createQuery(
-                "SELECT pd FROM PagoDetalle pd WHERE pd.pago.id = :idPago", 
+        try {
+            if (idPago == null) throw new DatosInvalidosException("El identificador es obligatorio");
+            return em.createQuery(
+                "SELECT pd FROM PagoDetalle pd WHERE pd.idPago.idPago = :idPago",
                 PagoDetalle.class)
                  .setParameter("idPago", idPago)
                  .getResultList();
+        } catch (jakarta.persistence.PersistenceException e) {
+            throw new DatosInvalidosException("No se pudo consultar la información solicitada", e);
+        }
+    }
+
+    /** Valida los datos y las referencias del módulo comercial. */
+    @Override
+    protected void validar(PagoDetalle registro) {
+        super.validar(registro);
+        ValidacionComercial.validar(em, registro);
     }
 }
 

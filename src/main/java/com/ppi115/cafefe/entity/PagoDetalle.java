@@ -47,6 +47,14 @@ public class PagoDetalle implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Pago idPago;
 
+    @jakarta.validation.constraints.NotBlank
+    @Size(max = 20)
+    @Column(name = "tipo_pago", length = 20)
+    private String tipoPago;
+
+    public String getTipoPago() { return tipoPago; }
+    public void setTipoPago(String tipoPago) { this.tipoPago = tipoPago; }
+
     /**
      * Inicializa PagoDetalle con los datos recibidos.
      */

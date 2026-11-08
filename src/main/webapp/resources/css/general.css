@@ -580,3 +580,66 @@ h3 {
     
    
 }
+
+/* Bienvenida y módulo comercial: misma paleta café que los catálogos. */
+.seccionEtiqueta { color:#8d6e63; font-size:12px; letter-spacing:1.5px; font-weight:700; }
+.bienvenida { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:36px; margin-bottom:28px; background:#f8efe7; border:1px solid #e0d2c8; border-radius:12px; }
+.bienvenida h2 { margin:12px 0; font-size:30px; line-height:1.25; }
+.bienvenida p, .seccionCabecera p, .moduloIntro p { color:#80665b; line-height:1.6; margin:0; }
+.bienvenidaIcono { font-size:56px; color:#a1887f; padding:20px; }
+.accesosInicio { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:20px; }
+.accesoTarjeta { display:flex; flex-direction:column; align-items:flex-start; gap:14px; padding:26px; border:1px solid #d7ccc8; border-radius:12px; text-decoration:none; color:#4e342e; background:#fffaf5; transition:background .15s,border-color .15s; }
+.accesoTarjeta:hover { background:#f8efe7; border-color:#a1887f; }
+.accesoTarjeta:focus-visible { outline:3px solid #8d6e63; outline-offset:3px; }
+.accesoTarjeta strong { font-size:20px; }
+.accesoTarjeta > span:not(.accesoIcono):not(.accesoAccion) { color:#80665b; font-size:14px; line-height:1.6; }
+.accesoIcono { font-size:23px; color:#6d4c41; padding:14px; border-radius:10px; background:#f0e3d8; }
+.accesoAccion { margin-top:auto; padding-top:10px; font-size:14px; font-weight:bold; color:#6d4c41; }
+.inicioSinAccesos { padding:24px; border:1px solid #d7ccc8; border-radius:10px; color:#80665b; }
+.sesionUsuario { display:flex; flex-direction:column; gap:14px; margin-top:28px; padding-top:20px; border-top:1px solid #8d6e63; color:#f4ebe3; line-height:1.5; font-size:14px; }
+.sesionUsuario .ui-button { width:100%; font-size:13px; }
+.moduloIntro { padding:0 0 24px; }
+.moduloIntro p { margin-top:8px; }
+.seccionCabecera { margin-bottom:24px; }
+.seccionCabecera h2 { font-size:22px; margin:0 0 8px; }
+.comercialGrid { grid-template-columns:repeat(2,minmax(0,1fr)); margin-bottom:28px; gap:22px 28px; }
+.comercialGrid .ui-inputtext { width:100%; }
+.pestanasComerciales.ui-tabs { padding:0; }
+.pestanasComerciales.ui-tabs .ui-tabs-nav { display:flex; gap:8px; padding:6px 6px 0 !important; background:#f0e3d8 !important; border-radius:10px 10px 0 0; }
+.pestanasComerciales.ui-tabs .ui-tabs-nav li { margin:0 !important; flex:1; text-align:center; }
+.pestanasComerciales.ui-tabs .ui-tabs-nav li a { display:block; float:none; padding:16px 20px !important; }
+.pestanasComerciales.ui-tabs .ui-tabs-panels { padding:28px !important; background:#fffaf5 !important; }
+.pestanasComerciales .ui-datatable { margin-bottom:22px; }
+.pestanasComerciales h3 { margin:24px 0 16px; font-size:18px; }
+.facturaDetalle { margin-top:28px; }
+.facturaResumen { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:20px 0 24px; }
+.resumenDato { display:flex; flex-direction:column; gap:10px; padding:20px; background:#f8efe7; border:1px solid #e0d2c8; border-radius:10px; }
+.resumenDato span { font-size:13px; color:#80665b; }
+.resumenDato strong { font-size:21px; color:#4e342e; }
+.resumenSaldo { background:#6d4c41; border-color:#6d4c41; }
+.resumenSaldo span, .resumenSaldo strong { color:#fffaf5; }
+@media(max-width:900px) { .facturaResumen { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:700px) {
+ .bienvenida { padding:24px; } .bienvenida h2 { font-size:24px; } .bienvenidaIcono { display:none; }
+ .comercialGrid { grid-template-columns:1fr; } .pestanasComerciales.ui-tabs .ui-tabs-panels { padding:18px !important; }
+ .pestanasComerciales.ui-tabs .ui-tabs-nav li a { padding:13px 10px !important; }
+ .sesionUsuario { margin-top:12px; padding-top:12px; } .accesosInicio { grid-template-columns:1fr; }
+}
+
+.pestanasComerciales .ui-datatable-tablewrapper { overflow-x:auto; }
+@media(max-width:700px) {
+ .barraLateral { flex-wrap:wrap; gap:16px; }
+ .catalogo { width:100%; flex-basis:100%; }
+ .catalogo form, .catalogo .ui-menubutton { width:100%; }
+ .sesionUsuario { flex-direction:row; align-items:center; justify-content:space-between; gap:12px; }
+ .sesionUsuario .ui-button { width:auto; }
+}
+
+.detalleOrdenCompleta { margin:24px 0; padding:22px; border:1px solid #e0d2c8; border-radius:10px; background:#f8efe7; }
+.detalleAviso { color:#80665b; line-height:1.6; }
+.totalOrden { display:flex; justify-content:space-between; gap:16px; padding-top:12px; color:#4e342e; font-size:18px; }
+
+.responsableEtiqueta { font-size:16px; font-weight:bold; color:#4e342e; }
+.responsableActual { display:block; min-height:42px; padding:11px 14px; background:#f0e3d8; border-radius:7px; color:#6d4c41; font-weight:600; }
+
+.pestanasComerciales .ui-datatable tbody tr.ordenElegida td { background:#e8d6c8 !important; }

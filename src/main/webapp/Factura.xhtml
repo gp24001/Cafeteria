@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets" xmlns:p="primefaces"
+                template="/WEB-INF/templates/general.xhtml">
+    <ui:param name="tituloPagina" value="Facturación y cobros"/>
+    <ui:define name="metadata"><f:viewParam name="tab" value="#{facturacionModel.tabActivo}"/></ui:define>
+    <ui:define name="contenido">
+        <div class="moduloIntro"></div>
+        <p:tabView id="facturacion" activeIndex="#{facturacionModel.tabActivo}" styleClass="pestanasComerciales">
+            <p:tab title="Nueva factura">
+        <h:form id="emision">
+            <p:messages id="mensajes"/>
+            <div class="seccionCabecera"><h2>Nueva factura</h2><p>Selecciona una orden completa y revisa su detalle antes de emitir la factura.</p></div>
+            <div class="formGrid comercialGrid">
+                <div class="campoGrupo">
+                    <p:outputLabel for="caja" value="Caja activa:"/>
+                    <p:selectOneMenu id="caja" value="#{facturacionModel.idCaja}" converter="uuidConverter" required="true">
+                        <f:selectItem itemLabel="Seleccione una caja" itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{facturacionModel.cajas}" var="c" itemValue="#{c.idCaja}" itemLabel="#{c.nombre}"/>
+                    </p:selectOneMenu>
+                </div>
+                <div class="campoGrupo">
+                    <span class="responsableEtiqueta">Empleado responsable</span>
+                    <h:outputText value="#{facturacionModel.nombreResponsable}" styleClass="responsableActual"/>
+                </div>
+                <div class="campoGrupo">
+                    <p:outputLabel for="cliente" value="Cliente:"/>
+                    <p:inputText id="cliente" value="#{facturacionModel.cliente}" required="true" maxlength="150"/>
+                </div>
+                <div class="campoGrupo">
+                    <p:outputLabel for="observaciones" value="Observaciones:"/>
+                    <p:inputText id="observaciones" value="#{facturacionModel.observaciones}"/>
+                </div>
+            </div>
+            <h3>Órdenes pendientes de facturar</h3>
+            <p:dataTable id="ordenes" value="#{facturacionModel.ordenesPendientes}" var="o" rowStyleClass="#{facturacionModel.ordenSeleccionada.idOrden eq o.idOrden ? 'ordenElegida' : ''}" paginator="true" rows="5" emptyMessage="No hay órdenes pendientes de facturar">
+                <p:column headerText="Fecha"><h:outputText value="#{o.fechaOrden}"><f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/El_Salvador"/></h:outputText></p:column>
+                <p:column headerText="Camarero"><h:outputText value="#{o.idEmpleadoRol.idEmpleado.nombre} #{o.idEmpleadoRol.idEmpleado.apellido}"/></p:column>
+                <p:column headerText="Observaciones"><h:outputText value="#{o.observacion}"/></p:column>
+                <p:column><p:commandButton value="#{facturacionModel.ordenSeleccionada.idOrden eq o.idOrden ? 'Orden seleccionada' : 'Elegir orden'}" action="#{facturacionModel.elegirOrden(o)}" process="@this" update="detalleOrden ordenes"/></p:column>
+            </p:dataTable>
+            <h:panelGroup id="detalleOrden" layout="block" styleClass="detalleOrdenCompleta">
+                <h:panelGroup rendered="#{not empty facturacionModel.ordenSeleccionada}" layout="block">
+                    <h3>Detalle de la orden seleccionada</h3>
+                    <p class="detalleAviso">Orden del <h:outputText value="#{facturacionModel.ordenSeleccionada.fechaOrden}"><f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/El_Salvador"/></h:outputText> · <h:outputText value="#{facturacionModel.ordenSeleccionada.idEmpleadoRol.idEmpleado.nombre} #{facturacionModel.ordenSeleccionada.idEmpleadoRol.idEmpleado.apellido}"/></p>
+                    <p class="detalleAviso">Se facturarán todos los productos de esta orden.</p>
+                    <p:dataTable value="#{facturacionModel.detalleOrden}" var="l" emptyMessage="Esta orden no tiene productos">
+                        <p:column headerText="Producto"><h:outputText value="#{l.idProducto.nombre}"/></p:column>
+                        <p:column headerText="Importe"><h:outputText value="#{l.precio}"><f:convertNumber type="currency" currencySymbol="$"/></h:outputText></p:column>
+                        <p:column headerText="Observaciones"><h:outputText value="#{l.observaciones}"/></p:column>
+                    </p:dataTable>
+                    <div class="totalOrden">Total de la orden <strong><h:outputText value="#{facturacionModel.totalOrden}"><f:convertNumber type="currency" currencySymbol="$"/></h:outputText></strong></div>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{empty facturacionModel.ordenSeleccionada}"><p class="detalleAviso">Elige una orden para consultar sus productos y su total.</p></h:panelGroup>
+            </h:panelGroup>
+            <p:commandButton value="Emitir y continuar al cobro" icon="pi pi-arrow-right" action="#{facturacionModel.emitir}" process="@form" update=":facturacion"/>
+        </h:form>
+            </p:tab>
+            <p:tab title="Cobros e historial">
+        <h:form id="cobros">
+            <p:messages id="mensajes"/>
+            <div class="seccionCabecera"><h2>Facturas y cobros</h2><p>Consulta una factura para registrar pagos o revisar su historial.</p></div>
+            <p:dataTable value="#{facturacionModel.facturas}" var="f" paginator="true" rows="10" emptyMessage="No hay facturas">
+                <p:column headerText="Cliente"><h:outputText value="#{f.cliente}"/></p:column>
+                <p:column headerText="Caja"><h:outputText value="#{f.idCaja.nombre}"/></p:column>
+                <p:column headerText="Fecha"><h:outputText value="#{f.fechaFacturacion}"><f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/El_Salvador"/></h:outputText></p:column>
+                <p:column headerText="Estado"><h:outputText value="#{f.estado}"/></p:column>
+                <p:column><p:commandButton value="Ver detalle" action="#{facturacionModel.seleccionar(f)}" process="@this" update="@form" resetValues="true"/></p:column>
+            </p:dataTable>
+            <h:panelGroup id="seleccion" layout="block" styleClass="facturaDetalle">
+                <h:panelGroup rendered="#{not empty facturacionModel.factura}" layout="block">
+                    <h3 class="detalleTitulo">Factura de <h:outputText value="#{facturacionModel.factura.cliente}"/></h3>
+                    <div class="facturaResumen">
+                        <div class="resumenDato"><span>Estado</span><strong><h:outputText value="#{facturacionModel.factura.estado}"/></strong></div>
+                        <div class="resumenDato"><span>Total facturado</span><strong>$<h:outputText value="#{facturacionModel.total}"/></strong></div>
+                        <div class="resumenDato"><span>Pagado</span><strong>$<h:outputText value="#{facturacionModel.pagado}"/></strong></div>
+                        <div class="resumenDato resumenSaldo"><span>Saldo pendiente</span><strong>$<h:outputText value="#{facturacionModel.saldo}"/></strong></div>
+                    </div>
+                    <p:dataTable value="#{facturacionModel.lineasFactura}" var="l" emptyMessage="Sin líneas facturadas">
+                        <p:column headerText="Producto"><h:outputText value="#{l.idOrdenProducto.idProducto.nombre}"/></p:column>
+                        <p:column headerText="Importe facturado"><h:outputText value="#{l.precio}"/></p:column>
+                        <p:column headerText="Observaciones"><h:outputText value="#{l.observaciones}"/></p:column>
+                    </p:dataTable>
+                    <h3>Historial de cobros</h3>
+                    <p:dataTable value="#{facturacionModel.historial}" var="d" emptyMessage="No hay cobros registrados">
+                        <p:column headerText="Medio"><h:outputText value="#{d.tipoPago}"/></p:column>
+                        <p:column headerText="Importe"><h:outputText value="#{d.monto}"/></p:column>
+                        <p:column headerText="Referencia"><h:outputText value="#{d.referenciaExterna}"/></p:column>
+                        <p:column headerText="Estado"><h:outputText value="#{d.idPago.estado}"/></p:column>
+                    </p:dataTable>
+                    <h:panelGroup rendered="#{facturacionModel.factura.estado != 'ANULADA' and facturacionModel.saldo gt 0}" layout="block">
+                        <h3>Registrar pago</h3>
+                        <h:panelGroup id="entrada" layout="block" styleClass="formGrid comercialGrid">
+                            <div class="campoGrupo"><p:outputLabel for="medio" value="Medio de pago:"/>
+                                <p:inputText id="medio" value="#{facturacionModel.detalle.tipoPago}" maxlength="20" placeholder="Efectivo, tarjeta..."/>
+                            </div>
+                            <div class="campoGrupo"><p:outputLabel for="importe" value="Importe:"/>
+                                <p:inputNumber id="importe" value="#{facturacionModel.detalle.monto}" decimalPlaces="2" minValue="0.01" maxValue="999999.99"/>
+                            </div>
+                            <div class="campoGrupo"><p:outputLabel for="referencia" value="Referencia externa:"/>
+                                <p:inputText id="referencia" value="#{facturacionModel.detalle.referenciaExterna}"/>
+                            </div>
+                        </h:panelGroup>
+                        <p:commandButton value="Agregar importe" action="#{facturacionModel.agregarDetalle}" process="@this entrada" update="@form" resetValues="true"/>
+                        <p:dataTable value="#{facturacionModel.detalles}" var="d" emptyMessage="Agregue uno o varios importes antes de confirmar">
+                            <p:column headerText="Medio"><h:outputText value="#{d.tipoPago}"/></p:column>
+                            <p:column headerText="Importe"><h:outputText value="#{d.monto}"/></p:column>
+                            <p:column><p:commandButton value="Quitar" action="#{facturacionModel.quitarDetalle(d)}" process="@this" update="@form"/></p:column>
+                        </p:dataTable>
+                        <p>Total a registrar: $<h:outputText value="#{facturacionModel.totalDetalles}"/></p>
+                        <p:commandButton value="Confirmar pago" action="#{facturacionModel.cobrar}" process="@this" update="@form" disabled="#{empty facturacionModel.detalles}"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{facturacionModel.factura.estado != 'ANULADA' and facturacionModel.pagado eq 0}" layout="block">
+                        <h3>Anular factura sin cobros</h3>
+                        <p:inputText id="motivo" value="#{facturacionModel.motivo}" placeholder="Motivo de anulación"/>
+                        <p:commandButton value="Anular factura" action="#{facturacionModel.anular}" process="@this motivo" update="@form"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:form>
+            </p:tab>
+        </p:tabView>
+    </ui:define>
+</ui:composition>
