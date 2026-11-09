@@ -5,6 +5,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -28,6 +30,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa empleado y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idEmpleado", "nombre", "apellido", "activo", "observaciones"})
 @Entity
 @Table(name = "empleado", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -159,6 +162,7 @@ public class Empleado implements Serializable {
      * Obtiene empleado rol list para la vista o la operación actual.
      * @return empleado rol list actual
      */
+    @JsonbTransient
     public List<EmpleadoRol> getEmpleadoRolList() {
         return empleadoRolList;
     }
@@ -167,6 +171,7 @@ public class Empleado implements Serializable {
      * Actualiza empleado rol list con el valor recibido.
      * @param empleadoRolList empleado rol list utilizado por la operación
      */
+    @JsonbTransient
     public void setEmpleadoRolList(List<EmpleadoRol> empleadoRolList) {
         this.empleadoRolList = empleadoRolList;
     }

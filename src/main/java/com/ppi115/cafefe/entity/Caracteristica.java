@@ -5,6 +5,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -29,6 +31,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa característica configurable y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idCaracteristica", "nombre", "activo", "observaciones", "idTipoCaracteristica"})
 @Entity
 @Table(name = "caracteristica", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -169,6 +172,7 @@ public class Caracteristica implements Serializable {
      * Obtiene producto caracteristica list para la vista o la operación actual.
      * @return producto caracteristica list actual
      */
+    @JsonbTransient
     public List<ProductoCaracteristica> getProductoCaracteristicaList() {
         return productoCaracteristicaList;
     }
@@ -177,6 +181,7 @@ public class Caracteristica implements Serializable {
      * Actualiza producto caracteristica list con el valor recibido.
      * @param productoCaracteristicaList producto caracteristica list utilizado por la operación
      */
+    @JsonbTransient
     public void setProductoCaracteristicaList(List<ProductoCaracteristica> productoCaracteristicaList) {
         this.productoCaracteristicaList = productoCaracteristicaList;
     }

@@ -5,6 +5,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,6 +32,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa asignación de rol a empleado y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idEmpleadoRol", "activo", "observaciones", "idEmpleado", "idRol"})
 @Entity
 @Table(name = "empleado_rol", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -159,6 +162,7 @@ public class EmpleadoRol implements Serializable {
      * Obtiene factura list para la vista o la operación actual.
      * @return factura list actual
      */
+    @JsonbTransient
     public List<Factura> getFacturaList() {
         return facturaList;
     }
@@ -167,6 +171,7 @@ public class EmpleadoRol implements Serializable {
      * Actualiza factura list con el valor recibido.
      * @param facturaList factura list utilizado por la operación
      */
+    @JsonbTransient
     public void setFacturaList(List<Factura> facturaList) {
         this.facturaList = facturaList;
     }
@@ -175,6 +180,7 @@ public class EmpleadoRol implements Serializable {
      * Obtiene orden list para la vista o la operación actual.
      * @return orden list actual
      */
+    @JsonbTransient
     public List<Orden> getOrdenList() {
         return ordenList;
     }
@@ -183,6 +189,7 @@ public class EmpleadoRol implements Serializable {
      * Actualiza orden list con el valor recibido.
      * @param ordenList orden list utilizado por la operación
      */
+    @JsonbTransient
     public void setOrdenList(List<Orden> ordenList) {
         this.ordenList = ordenList;
     }

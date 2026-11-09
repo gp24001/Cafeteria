@@ -5,6 +5,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,6 +32,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa pago y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idPago", "estado", "observaciones", "idFactura"})
 @Entity
 @Table(name = "pago", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -139,6 +142,7 @@ public class Pago implements Serializable {
      * Obtiene pago detalle list para la vista o la operación actual.
      * @return pago detalle list actual
      */
+    @JsonbTransient
     public List<PagoDetalle> getPagoDetalleList() {
         return pagoDetalleList;
     }
@@ -147,6 +151,7 @@ public class Pago implements Serializable {
      * Actualiza pago detalle list con el valor recibido.
      * @param pagoDetalleList pago detalle list utilizado por la operación
      */
+    @JsonbTransient
     public void setPagoDetalleList(List<PagoDetalle> pagoDetalleList) {
         this.pagoDetalleList = pagoDetalleList;
     }

@@ -2,6 +2,7 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -28,6 +29,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa tipo y límite de descuento y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idTipoDescuento", "nombre", "activo", "descuentoMaximo", "observaciones"})
 @Entity
 @Table(name = "tipo_descuento", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -180,6 +182,7 @@ public class TipoDescuento implements Serializable {
      * Actualiza descuento list con el valor recibido.
      * @param descuentoList descuento list utilizado por la operación
      */
+    @JsonbTransient
     public void setDescuentoList(List<Descuento> descuentoList) {
         this.descuentoList = descuentoList;
     }

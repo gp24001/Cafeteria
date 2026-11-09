@@ -1,6 +1,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -28,6 +30,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa orden de venta y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idOrden", "fechaOrden", "observacion", "idEmpleadoRol"})
 @Entity
 @Table(name = "orden", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -121,6 +124,7 @@ public class Orden implements Serializable {
      * Obtiene orden producto list para la vista o la operación actual.
      * @return orden producto list actual
      */
+    @JsonbTransient
     public List<OrdenProducto> getOrdenProductoList() {
         return ordenProductoList;
     }
@@ -129,6 +133,7 @@ public class Orden implements Serializable {
      * Actualiza orden producto list con el valor recibido.
      * @param ordenProductoList orden producto list utilizado por la operación
      */
+    @JsonbTransient
     public void setOrdenProductoList(List<OrdenProducto> ordenProductoList) {
         this.ordenProductoList = ordenProductoList;
     }

@@ -5,6 +5,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,6 +35,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa factura y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idFactura", "cliente", "fechaFacturacion", "estado", "observaciones", "idCaja", "idEmpleadoRol"})
 @Entity
 @Table(name = "factura", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -169,6 +172,7 @@ public class Factura implements Serializable {
      * Obtiene pago list para la vista o la operación actual.
      * @return pago list actual
      */
+    @JsonbTransient
     public List<Pago> getPagoList() {
         return pagoList;
     }
@@ -177,6 +181,7 @@ public class Factura implements Serializable {
      * Actualiza pago list con el valor recibido.
      * @param pagoList pago list utilizado por la operación
      */
+    @JsonbTransient
     public void setPagoList(List<Pago> pagoList) {
         this.pagoList = pagoList;
     }
@@ -185,6 +190,7 @@ public class Factura implements Serializable {
      * Obtiene factura orden producto list para la vista o la operación actual.
      * @return factura orden producto list actual
      */
+    @JsonbTransient
     public List<FacturaOrdenProducto> getFacturaOrdenProductoList() {
         return facturaOrdenProductoList;
     }
@@ -193,6 +199,7 @@ public class Factura implements Serializable {
      * Actualiza factura orden producto list con el valor recibido.
      * @param facturaOrdenProductoList factura orden producto list utilizado por la operación
      */
+    @JsonbTransient
     public void setFacturaOrdenProductoList(List<FacturaOrdenProducto> facturaOrdenProductoList) {
         this.facturaOrdenProductoList = facturaOrdenProductoList;
     }

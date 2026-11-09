@@ -5,6 +5,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -28,6 +30,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa categoría de productos y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idTipoProducto", "nombre", "activo", "observaciones"})
 @Entity
 @Table(name = "tipo_producto", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -150,6 +153,7 @@ public class TipoProducto implements Serializable {
      * Obtiene producto tipo producto list para la vista o la operación actual.
      * @return producto tipo producto list actual
      */
+    @JsonbTransient
     public List<ProductoTipoProducto> getProductoTipoProductoList() {
         return productoTipoProductoList;
     }
@@ -158,6 +162,7 @@ public class TipoProducto implements Serializable {
      * Actualiza producto tipo producto list con el valor recibido.
      * @param productoTipoProductoList producto tipo producto list utilizado por la operación
      */
+    @JsonbTransient
     public void setProductoTipoProductoList(List<ProductoTipoProducto> productoTipoProductoList) {
         this.productoTipoProductoList = productoTipoProductoList;
     }

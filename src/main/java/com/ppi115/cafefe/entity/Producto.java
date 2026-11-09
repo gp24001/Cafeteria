@@ -5,6 +5,8 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
+import jakarta.json.bind.annotation.JsonbTransient;
 import java.math.BigDecimal;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -30,6 +32,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa producto del catálogo y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idProducto", "nombre", "precioSugerido", "activo", "comentarios"})
 @Entity
 @Table(name = "producto", catalog = "cafeteria", schema = "public")
 @NamedQueries({
@@ -187,6 +190,7 @@ public class Producto implements Serializable {
      * Obtiene producto caracteristica list para la vista o la operación actual.
      * @return producto caracteristica list actual
      */
+    @JsonbTransient
     public List<ProductoCaracteristica> getProductoCaracteristicaList() {
         return productoCaracteristicaList;
     }
@@ -195,6 +199,7 @@ public class Producto implements Serializable {
      * Actualiza producto caracteristica list con el valor recibido.
      * @param productoCaracteristicaList producto caracteristica list utilizado por la operación
      */
+    @JsonbTransient
     public void setProductoCaracteristicaList(List<ProductoCaracteristica> productoCaracteristicaList) {
         this.productoCaracteristicaList = productoCaracteristicaList;
     }
@@ -203,6 +208,7 @@ public class Producto implements Serializable {
      * Obtiene orden producto list para la vista o la operación actual.
      * @return orden producto list actual
      */
+    @JsonbTransient
     public List<OrdenProducto> getOrdenProductoList() {
         return ordenProductoList;
     }
@@ -211,6 +217,7 @@ public class Producto implements Serializable {
      * Actualiza orden producto list con el valor recibido.
      * @param ordenProductoList orden producto list utilizado por la operación
      */
+    @JsonbTransient
     public void setOrdenProductoList(List<OrdenProducto> ordenProductoList) {
         this.ordenProductoList = ordenProductoList;
     }
@@ -219,6 +226,7 @@ public class Producto implements Serializable {
      * Obtiene descuento producto list para la vista o la operación actual.
      * @return descuento producto list actual
      */
+    @JsonbTransient
     public List<DescuentoProducto> getDescuentoProductoList() {
         return descuentoProductoList;
     }
@@ -227,6 +235,7 @@ public class Producto implements Serializable {
      * Actualiza descuento producto list con el valor recibido.
      * @param descuentoProductoList descuento producto list utilizado por la operación
      */
+    @JsonbTransient
     public void setDescuentoProductoList(List<DescuentoProducto> descuentoProductoList) {
         this.descuentoProductoList = descuentoProductoList;
     }
@@ -235,6 +244,7 @@ public class Producto implements Serializable {
      * Obtiene producto tipo producto list para la vista o la operación actual.
      * @return producto tipo producto list actual
      */
+    @JsonbTransient
     public List<ProductoTipoProducto> getProductoTipoProductoList() {
         return productoTipoProductoList;
     }
@@ -243,6 +253,7 @@ public class Producto implements Serializable {
      * Actualiza producto tipo producto list con el valor recibido.
      * @param productoTipoProductoList producto tipo producto list utilizado por la operación
      */
+    @JsonbTransient
     public void setProductoTipoProductoList(List<ProductoTipoProducto> productoTipoProductoList) {
         this.productoTipoProductoList = productoTipoProductoList;
     }

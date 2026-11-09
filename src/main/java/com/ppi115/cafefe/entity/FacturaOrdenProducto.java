@@ -5,6 +5,7 @@
 package com.ppi115.cafefe.entity;
 
 import com.ppi115.cafefe.control.UUIDConverter;
+import jakarta.json.bind.annotation.JsonbPropertyOrder;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -28,6 +29,7 @@ import java.util.UUID;
  * @author jazmi
  */
 /** Entidad JPA que representa detalle facturado de una orden y sus relaciones en la cafetería. */
+@JsonbPropertyOrder({"idFacturaOrdenProducto", "precio", "observaciones", "idFactura", "idOrdenProducto"})
 @Entity
 @Table(name = "factura_orden_producto", catalog = "cafeteria", schema = "public")
 @NamedQueries({
