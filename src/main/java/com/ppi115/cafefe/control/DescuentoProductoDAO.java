@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.UUID;
 
 /** Acceso a datos de descuento asignado a un producto. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
+@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class DescuentoProductoDAO extends DefaultDAO<DescuentoProducto> {

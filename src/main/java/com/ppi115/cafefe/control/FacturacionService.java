@@ -12,6 +12,7 @@ import java.util.*;
 import static com.ppi115.cafefe.control.ValidacionComercial.*;
 
 /** Operaciones de facturación y cobro. */
+@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class FacturacionService {
@@ -159,19 +160,6 @@ public class FacturacionService {
         List<UUID> ids = em.createQuery("SELECT op.idOrdenProducto FROM OrdenProducto op "
                 + "WHERE op.idOrden.idOrden = :id", UUID.class).setParameter("id", idOrden).getResultList();
         return emitirFactura(idCaja, idEmpleadoRol, cliente, ids, observaciones);
-    }
-
-    /** El controlador obtiene idEmpleado de la sesión, nunca de un campo del formulario. */
-    public Factura emitirOrdenParaEmpleado(UUID idCaja, UUID idEmpleado, String cliente, UUID idOrden, String observaciones) {
-        referencia(em, Empleado.class, idEmpleado, "El empleado de la sesión");
-        List<EmpleadoRol> responsables = em.createQuery("SELECT er FROM EmpleadoRol er "
-                + "JOIN er.idEmpleado e JOIN er.idRol r WHERE e.idEmpleado = :id "
-                + "AND e.activo = true AND er.activo = true AND r.activo = true "
-                + "AND LOWER(TRIM(r.nombre)) IN ('administrador', 'admin', 'cajero') "
-                + "ORDER BY r.nombre, er.idEmpleadoRol", EmpleadoRol.class)
-                .setParameter("id", idEmpleado).getResultList();
-        exigir(!responsables.isEmpty(), "El empleado de la sesión no tiene permiso activo para facturar");
-        return emitirOrden(idCaja, responsables.getFirst().getIdEmpleadoRol(), cliente, idOrden, observaciones);
     }
 
     public List<Orden> findOrdenesPendientes() {

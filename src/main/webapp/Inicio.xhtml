@@ -7,27 +7,23 @@
         <section class="bienvenida">
             <div class="bienvenidaTexto">
                 <span class="seccionEtiqueta">BIENVENIDO A CAFEFE</span>
-                <h2>Hola, <h:outputText value="#{accesoModel.nombreEmpleado}"/>.</h2>
                 <p>Todo listo para comenzar. Elige el área en la que vas a trabajar.</p>
             </div>
             <span class="bienvenidaIcono" aria-hidden="true">☕</span>
         </section>
         <div class="accesosInicio">
-            <h:link outcome="/Orden" styleClass="accesoTarjeta" rendered="#{accesoModel.permite('Orden')}">
+            <h:link outcome="/Orden" styleClass="accesoTarjeta">
                 <span class="accesoIcono pi pi-list"/><strong>Órdenes</strong><span>Registra pedidos, productos y descuentos.</span><span class="accesoAccion">Gestionar órdenes →</span>
             </h:link>
-            <h:link outcome="/Factura" styleClass="accesoTarjeta" rendered="#{accesoModel.permite('Factura')}">
+            <h:link outcome="/Factura" styleClass="accesoTarjeta">
                 <span class="accesoIcono pi pi-receipt"/><strong>Facturación y cobros</strong><span>Emite facturas, registra pagos y revisa su historial.</span><span class="accesoAccion">Ir a facturación →</span>
             </h:link>
-            <h:link outcome="/Caja" styleClass="accesoTarjeta" rendered="#{accesoModel.permite('Caja')}">
+            <h:link outcome="/Caja" styleClass="accesoTarjeta">
                 <span class="accesoIcono pi pi-wallet"/><strong>Cajas</strong><span>Administra las cajas disponibles para facturar.</span><span class="accesoAccion">Administrar cajas →</span>
             </h:link>
-            <h:link outcome="/Empleado" styleClass="accesoTarjeta" rendered="#{accesoModel.permite('Empleado')}">
+            <h:link outcome="/Empleado" styleClass="accesoTarjeta">
                 <span class="accesoIcono pi pi-users"/><strong>Empleados</strong><span>Consulta el equipo y sus asignaciones de rol.</span><span class="accesoAccion">Gestionar empleados →</span>
             </h:link>
         </div>
-        <h:panelGroup rendered="#{not accesoModel.permite('Orden') and not accesoModel.permite('Factura') and not accesoModel.permite('Empleado')}" layout="block" styleClass="inicioSinAccesos">
-            Tu rol no tiene opciones de catálogo asignadas en esta etapa.
-        </h:panelGroup>
     </ui:define>
 </ui:composition>

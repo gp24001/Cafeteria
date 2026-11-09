@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 /** Acceso a datos de descuento y su vigencia. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
+@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class DescuentoDAO extends DefaultDAO<Descuento> {

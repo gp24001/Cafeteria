@@ -20,8 +20,12 @@
                     </p:selectOneMenu>
                 </div>
                 <div class="campoGrupo">
-                    <span class="responsableEtiqueta">Empleado responsable</span>
-                    <h:outputText value="#{facturacionModel.nombreResponsable}" styleClass="responsableActual"/>
+                    <p:outputLabel for="responsable" value="Empleado responsable:"/>
+                    <p:selectOneMenu id="responsable" value="#{facturacionModel.idEmpleadoRol}" converter="uuidConverter" required="true">
+                        <f:selectItem itemLabel="Seleccione al responsable" itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{facturacionModel.facturadores}" var="er" itemValue="#{er.idEmpleadoRol}"
+                                       itemLabel="#{er.idEmpleado.nombre} #{er.idEmpleado.apellido} (#{er.idRol.nombre})"/>
+                    </p:selectOneMenu>
                 </div>
                 <div class="campoGrupo">
                     <p:outputLabel for="cliente" value="Cliente:"/>

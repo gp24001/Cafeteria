@@ -31,6 +31,8 @@ public class FacturacionModel implements Serializable {
     private List<PagoDetalle> historial = List.of();
     private List<PagoDetalle> detalles = new ArrayList<>();
     private UUID idCaja;
+    private UUID idEmpleadoRol;
+    private List<EmpleadoRol> facturadores = List.of();
     private String cliente;
     private String observaciones;
     private String motivo;
@@ -42,6 +44,7 @@ public class FacturacionModel implements Serializable {
     @PostConstruct public void cargar() {
         try {
             cajas = cajaDAO.findActivas();
+            facturadores = servicio.findFacturadores();
             pendientes = servicio.findLineasPendientes();
             ordenesPendientes = servicio.findOrdenesPendientes();
             facturas = servicio.findFacturas();
@@ -51,9 +54,7 @@ public class FacturacionModel implements Serializable {
     public void emitir() {
         try {
             if (ordenSeleccionada == null) throw new IllegalArgumentException("Seleccione una orden completa");
-            AccesoService.Acceso acceso = accesoActual();
-            if (acceso == null) throw new IllegalArgumentException("Debe iniciar sesión para facturar");
-            Factura nueva = servicio.emitirOrdenParaEmpleado(idCaja, acceso.idEmpleado(), cliente,
+            Factura nueva = servicio.emitirOrden(idCaja, idEmpleadoRol, cliente,
                     ordenSeleccionada.getIdOrden(), observaciones);
             seleccionadas = new ArrayList<>(); cliente = null; observaciones = null;
             ordenSeleccionada = null; detalleOrden = List.of();
@@ -172,13 +173,7 @@ public class FacturacionModel implements Serializable {
         return detalleOrden.stream().map(OrdenProducto::getPrecio).filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-    private AccesoService.Acceso accesoActual() {
-        FacesContext contexto = getFacesContext();
-        return contexto == null ? null : (AccesoService.Acceso) contexto.getExternalContext()
-                .getSessionMap().get(AccesoModel.CLAVE_SESION);
-    }
-    public String getNombreResponsable() {
-        AccesoService.Acceso acceso = accesoActual();
-        return acceso == null ? "" : acceso.nombre();
-    }
+    public List<EmpleadoRol> getFacturadores() { return facturadores; }
+    public UUID getIdEmpleadoRol() { return idEmpleadoRol; }
+    public void setIdEmpleadoRol(UUID idEmpleadoRol) { this.idEmpleadoRol = idEmpleadoRol; }
 }

@@ -68,6 +68,73 @@ public abstract class DefaultDAO<T> implements DAOInterface<T>{
     protected abstract EntityManager getEntityManager();
 
     /**
+     * Comprueba la existencia de una entidad principal antes de consultar sus asociaciones.
+     * @param tipo clase de la entidad principal
+     * @param id identificador de la entidad principal
+     * @return true si el registro existe
+     */
+    public boolean existe(Class<?> tipo, Object id) {
+        if (id == null) throw new DatosInvalidosException("El identificador es obligatorio");
+        return getEntityManager().find(tipo, id) != null;
+    }
+
+    /**
+     * Consulta una página de asociaciones de una entidad principal.
+     * @param relacion atributo de referencia definido por el recurso, por ejemplo idProducto
+     * @param idPadre UUID de la entidad principal; su clave tiene el mismo nombre que la referencia
+     * @param first posición inicial de la página
+     * @param max cantidad máxima de registros
+     * @return asociaciones que pertenecen exclusivamente a la entidad indicada
+     */
+    public List<T> findRangePorRelacion(String relacion, java.util.UUID idPadre, int first, int max) {
+        validarRango(first, max);
+        return consultaPorRelacion(relacion, idPadre).setFirstResult(first).setMaxResults(max).getResultList();
+    }
+
+    /**
+     * Consulta todas las asociaciones de una entidad principal.
+     * @param relacion atributo de referencia definido por el recurso
+     * @param idPadre UUID de la entidad principal
+     * @return asociaciones de esa entidad, sin paginación
+     */
+    public List<T> findAllPorRelacion(String relacion, java.util.UUID idPadre) {
+        return consultaPorRelacion(relacion, idPadre).getResultList();
+    }
+
+    /**
+     * Cuenta únicamente las asociaciones pertenecientes a una entidad principal.
+     * @param relacion atributo de referencia definido por el recurso
+     * @param idPadre UUID de la entidad principal
+     * @return cantidad de asociaciones que cumplen la relación
+     */
+    public int contarPorRelacion(String relacion, java.util.UUID idPadre) {
+        if (idPadre == null) throw new DatosInvalidosException("El identificador es obligatorio");
+        var cb = getEntityManager().getCriteriaBuilder();
+        var cq = cb.createQuery(Long.class);
+        var raiz = cq.from(entityClass);
+        cq.select(cb.count(raiz)).where(cb.equal(raiz.get(relacion).get(relacion), idPadre));
+        return getEntityManager().createQuery(cq).getSingleResult().intValue();
+    }
+
+    /**
+     * Prepara una consulta filtrada por la referencia principal y ordenada por la clave de la asociación.
+     * @param relacion atributo JPA de referencia, proporcionado por el código del recurso
+     * @param idPadre UUID de la entidad principal
+     * @return consulta que conserva el filtro antes de aplicar paginación
+     */
+    private TypedQuery<T> consultaPorRelacion(String relacion, java.util.UUID idPadre) {
+        if (idPadre == null) throw new DatosInvalidosException("El identificador es obligatorio");
+        var cb = getEntityManager().getCriteriaBuilder();
+        var cq = cb.createQuery(entityClass);
+        var raiz = cq.from(entityClass);
+        String clave = getEntityManager().getMetamodel().entity(entityClass).getId(java.util.UUID.class).getName();
+        cq.select(raiz).where(cb.equal(raiz.get(relacion).get(relacion), idPadre))
+                .orderBy(cb.asc(raiz.get(clave)));
+        return getEntityManager().createQuery(cq);
+    }
+
+
+    /**
      * Inicializa DefaultDAO con los datos recibidos.
      * @param entityClass entity class utilizado por la operación
 
@@ -85,6 +152,7 @@ public abstract class DefaultDAO<T> implements DAOInterface<T>{
         try {
             validar(entity);
             getEntityManager().persist(entity);
+            getEntityManager().flush();
         } catch (jakarta.persistence.PersistenceException e) {
             throw new DatosInvalidosException("No se pudo crear el registro. Revise sus datos y relaciones", e);
         }
@@ -102,6 +170,7 @@ public abstract class DefaultDAO<T> implements DAOInterface<T>{
         try {
             validar(entity);
             getEntityManager().merge(entity);
+            getEntityManager().flush();
         } catch (jakarta.persistence.PersistenceException e) {
             throw new DatosInvalidosException("No se pudo modificar el registro. Revise sus datos y relaciones", e);
         }
@@ -122,6 +191,7 @@ public abstract class DefaultDAO<T> implements DAOInterface<T>{
         if (entity != null) {
             try {
                 getEntityManager().remove(entity);
+                getEntityManager().flush();
             } catch (jakarta.persistence.PersistenceException e) {
                 throw new DatosInvalidosException("No se pudo eliminar el registro. Puede tener datos relacionados", e);
             }

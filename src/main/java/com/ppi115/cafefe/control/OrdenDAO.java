@@ -23,6 +23,7 @@ import java.util.Map;
 import org.primefaces.model.FilterMeta;
 
 /** Acceso a datos de orden de venta. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
+@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class OrdenDAO extends DefaultDAO<Orden> {
@@ -137,6 +138,8 @@ public class OrdenDAO extends DefaultDAO<Orden> {
             if (id == null) {
                 throw new DatosInvalidosException("El ID no puede ser null");
             }
+            Orden actual = em.find(Orden.class, id);
+            if (actual != null) protegerOrden(actual);
             em.createQuery("DELETE FROM OrdenProducto op WHERE op.idOrden.idOrden = :id")
                     .setParameter("id", id)
                     .executeUpdate();
@@ -153,6 +156,7 @@ public class OrdenDAO extends DefaultDAO<Orden> {
      */
     @Override
     protected void validar(Orden r) {
+        if (r != null) protegerOrden(r);
         super.validar(r);
         // Las relaciones se eligen al crear; al editar se conservan las ya persistidas.
         Orden anterior = em.find(Orden.class, r.getIdOrden());
@@ -237,4 +241,19 @@ public class OrdenDAO extends DefaultDAO<Orden> {
                  .getResultList();
     }
 
+    /** Impide cambiar una orden que ya tiene una factura vigente.
+     * Bloquea la orden antes de comprobar sus productos facturados.
+     */
+    private void protegerOrden(Orden registro) {
+        UUID id = registro.getIdOrden();
+        if (id == null) return;
+        // Bloquea la fila sin refrescar ni descartar los cambios del formulario JSF.
+        if (em.createNativeQuery("SELECT id_orden FROM public.orden "
+                + "WHERE id_orden = CAST(? AS uuid) FOR UPDATE")
+                .setParameter(1, id.toString()).getResultList().isEmpty()) return;
+        long facturadas = em.createQuery("SELECT COUNT(f) FROM FacturaOrdenProducto f "
+                + "WHERE f.idOrdenProducto.idOrden.idOrden = :id AND f.idFactura.estado <> 'ANULADA'", Long.class)
+                .setParameter("id", id).getSingleResult();
+        if (facturadas > 0) throw new DefaultDAO.DatosInvalidosException("No se puede modificar una orden que ya está facturada");
+    }
 }

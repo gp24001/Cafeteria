@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import java.util.List;
 
 /** Acceso a datos de empleado. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
+@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class EmpleadoDAO extends DefaultDAO<Empleado> {

@@ -595,9 +595,6 @@ h3 {
 .accesoTarjeta > span:not(.accesoIcono):not(.accesoAccion) { color:#80665b; font-size:14px; line-height:1.6; }
 .accesoIcono { font-size:23px; color:#6d4c41; padding:14px; border-radius:10px; background:#f0e3d8; }
 .accesoAccion { margin-top:auto; padding-top:10px; font-size:14px; font-weight:bold; color:#6d4c41; }
-.inicioSinAccesos { padding:24px; border:1px solid #d7ccc8; border-radius:10px; color:#80665b; }
-.sesionUsuario { display:flex; flex-direction:column; gap:14px; margin-top:28px; padding-top:20px; border-top:1px solid #8d6e63; color:#f4ebe3; line-height:1.5; font-size:14px; }
-.sesionUsuario .ui-button { width:100%; font-size:13px; }
 .moduloIntro { padding:0 0 24px; }
 .moduloIntro p { margin-top:8px; }
 .seccionCabecera { margin-bottom:24px; }
@@ -623,7 +620,7 @@ h3 {
  .bienvenida { padding:24px; } .bienvenida h2 { font-size:24px; } .bienvenidaIcono { display:none; }
  .comercialGrid { grid-template-columns:1fr; } .pestanasComerciales.ui-tabs .ui-tabs-panels { padding:18px !important; }
  .pestanasComerciales.ui-tabs .ui-tabs-nav li a { padding:13px 10px !important; }
- .sesionUsuario { margin-top:12px; padding-top:12px; } .accesosInicio { grid-template-columns:1fr; }
+ .accesosInicio { grid-template-columns:1fr; }
 }
 
 .pestanasComerciales .ui-datatable-tablewrapper { overflow-x:auto; }
@@ -631,15 +628,10 @@ h3 {
  .barraLateral { flex-wrap:wrap; gap:16px; }
  .catalogo { width:100%; flex-basis:100%; }
  .catalogo form, .catalogo .ui-menubutton { width:100%; }
- .sesionUsuario { flex-direction:row; align-items:center; justify-content:space-between; gap:12px; }
- .sesionUsuario .ui-button { width:auto; }
 }
 
 .detalleOrdenCompleta { margin:24px 0; padding:22px; border:1px solid #e0d2c8; border-radius:10px; background:#f8efe7; }
 .detalleAviso { color:#80665b; line-height:1.6; }
 .totalOrden { display:flex; justify-content:space-between; gap:16px; padding-top:12px; color:#4e342e; font-size:18px; }
-
-.responsableEtiqueta { font-size:16px; font-weight:bold; color:#4e342e; }
-.responsableActual { display:block; min-height:42px; padding:11px 14px; background:#f0e3d8; border-radius:7px; color:#6d4c41; font-weight:600; }
 
 .pestanasComerciales .ui-datatable tbody tr.ordenElegida td { background:#e8d6c8 !important; }

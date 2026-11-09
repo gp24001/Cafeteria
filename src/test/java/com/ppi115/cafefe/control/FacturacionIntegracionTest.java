@@ -50,19 +50,13 @@ public class FacturacionIntegracionTest extends ComercialDAOIntegracionBase<Fact
     }
 
     @Test
-    void responsableEsLaAsignacionDelEmpleadoDeSesion() {
-        rol.setNombre("Cajero"); em.flush();
-        Factura emitida = servicio().emitirOrdenParaEmpleado(caja.getIdCaja(), empleado.getIdEmpleado(),
-                "Cliente", orden.getIdOrden(), null);
-        assertEquals(empleado.getIdEmpleado(), emitida.getIdEmpleadoRol().getIdEmpleado().getIdEmpleado());
-        assertEquals(empleadoRol.getIdEmpleadoRol(), emitida.getIdEmpleadoRol().getIdEmpleadoRol());
-    }
-
-    @Test
-    void rechazaResponsableSinPermisosDeFacturacion() {
-        // La asignación de la fixture es Camarero, sin permiso para emitir facturas.
-        assertThrows(IllegalArgumentException.class, () -> servicio().emitirOrdenParaEmpleado(caja.getIdCaja(),
-                empleado.getIdEmpleado(), "Cliente", orden.getIdOrden(), null));
+    void persisteLaAsignacionSeleccionadaEnLaFactura() {
+        UUID responsable = empleadoRol.getIdEmpleadoRol();
+        Factura emitida = servicio().emitirOrden(caja.getIdCaja(), responsable, "Cliente", orden.getIdOrden(), null);
+        UUID id = emitida.getIdFactura();
+        em.flush();
+        em.clear();
+        assertEquals(responsable, em.find(Factura.class, id).getIdEmpleadoRol().getIdEmpleadoRol());
     }
 
     @Test

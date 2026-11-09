@@ -10,6 +10,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class FacturaOrdenProductoDAO extends DefaultDAO<FacturaOrdenProducto> {

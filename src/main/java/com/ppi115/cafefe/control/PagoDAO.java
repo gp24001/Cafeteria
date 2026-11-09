@@ -9,6 +9,7 @@ import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class PagoDAO extends DefaultDAO<Pago> {

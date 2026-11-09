@@ -35,4 +35,38 @@ class FacturacionModelTest {
             @Override protected jakarta.faces.context.FacesContext getFacesContext() { return null; }
         };
     }
+
+    @Test void rechazaFraccionesDeCentavoSinRedondearElCobro() {
+        var modelo = sinVista();
+        modelo.getDetalle().setTipoPago("EFECTIVO");
+        modelo.getDetalle().setMonto(new BigDecimal("1.005"));
+        modelo.agregarDetalle();
+        assertTrue(modelo.getDetalles().isEmpty());
+        assertEquals(new BigDecimal("1.005"), modelo.getDetalle().getMonto());
+    }
+
+    @Test void permiteCorregirElMedioDePagoSinDuplicarElImporte() {
+        var modelo = sinVista();
+        modelo.getDetalle().setMonto(new BigDecimal("7.25"));
+        modelo.getDetalle().setTipoPago(" ");
+        modelo.agregarDetalle();
+        assertTrue(modelo.getDetalles().isEmpty());
+        modelo.getDetalle().setTipoPago("TARJETA");
+        modelo.agregarDetalle();
+        assertEquals(1, modelo.getDetalles().size());
+        assertEquals(new BigDecimal("7.25"), modelo.getTotalDetalles());
+        assertNull(modelo.getDetalle().getMonto());
+    }
+
+    @Test void sumaCobroMixtoConPrecisionDeCentavos() {
+        var modelo = sinVista();
+        modelo.getDetalle().setTipoPago("EFECTIVO");
+        modelo.getDetalle().setMonto(new BigDecimal("2.10"));
+        modelo.agregarDetalle();
+        modelo.getDetalle().setTipoPago("TARJETA");
+        modelo.getDetalle().setMonto(new BigDecimal("3.20"));
+        modelo.agregarDetalle();
+        assertEquals(new BigDecimal("5.30"), modelo.getTotalDetalles());
+        assertEquals(2, modelo.getDetalles().size());
+    }
 }
