@@ -121,7 +121,7 @@ public class ProductoResource implements Serializable {
     }
 
     /**
-     * Convierte los datos a JSON con sangría, respetando JsonbPropertyOrder y JsonbTransient de las entidades.
+     * Convierte los datos a JSON con sangría, incluyendo únicamente el UUID de cada relación.
      *
      * @param entidad registro, colección o valor que se desea serializar
      * @return representación JSON con saltos de línea y sangría
@@ -129,9 +129,7 @@ public class ProductoResource implements Serializable {
      * @throws IllegalStateException si no se pueden liberar los recursos de JSON-B
      */
     private String json(Object entidad) {
-        try (Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withFormatting(true))) { return jsonb.toJson(entidad); }
-        catch (RuntimeException ex) { throw ex; }
-        catch (Exception ex) { throw new IllegalStateException("No se pudo preparar el JSON", ex); }
+        return RestJson.serializar(entidad);
     }
 
     /**

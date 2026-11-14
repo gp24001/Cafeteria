@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 /** Acceso a datos de línea de producto de una orden. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
-@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class OrdenProductoDAO extends DefaultDAO<OrdenProducto> {

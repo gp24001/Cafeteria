@@ -79,7 +79,7 @@ abstract class AbstractResourceTest<T> {
     }
 
     protected void comprobarContenido(Response respuesta, Object esperado) throws Exception {
-        try (var lector = Json.createReader(new java.io.StringReader(jsonDe(esperado)));
+        try (var lector = Json.createReader(new java.io.StringReader(RestJson.serializar(esperado)));
              var recibido = Json.createReader(new java.io.StringReader((String) respuesta.getEntity()))) {
             assertEquals(lector.readValue(), recibido.readValue());
         }

@@ -6,7 +6,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 /** Acceso a datos de característica configurable. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
-@jakarta.enterprise.context.Dependent
 @Stateless
 @jakarta.ejb.LocalBean
 public class CaracteristicaDAO extends DefaultDAO<Caracteristica> {

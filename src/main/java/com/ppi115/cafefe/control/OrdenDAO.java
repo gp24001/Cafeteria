@@ -23,7 +23,6 @@ import java.util.Map;
 import org.primefaces.model.FilterMeta;
 
 /** Acceso a datos de orden de venta. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
-@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class OrdenDAO extends DefaultDAO<Orden> {

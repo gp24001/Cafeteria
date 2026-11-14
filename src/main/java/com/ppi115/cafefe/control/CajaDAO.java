@@ -8,7 +8,6 @@ import jakarta.ejb.LocalBean;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class CajaDAO extends DefaultDAO<Caja>{

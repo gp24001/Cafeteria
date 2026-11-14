@@ -90,6 +90,13 @@ class RestHttpIT {
         assertTrue(registros.size() <= 2);
         if (!registros.isEmpty()) {
             var primero = (java.util.Map<?, ?>) registros.getFirst();
+            for (var entrada : primero.entrySet()) {
+                if (entrada.getValue() instanceof Map<?, ?> referencia) {
+                    assertEquals(1, referencia.size(), "La relación solo debe contener su UUID");
+                    assertTrue(referencia.containsKey(entrada.getKey()));
+                    assertDoesNotThrow(() -> UUID.fromString(referencia.get(entrada.getKey()).toString()));
+                }
+            }
             String clave = "id" + nombre;
             var registro = api("GET", ruta + "/" + primero.get(clave), null);
             assertEquals(200, registro.statusCode(), nombre + ": " + registro.body());

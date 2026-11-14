@@ -12,7 +12,6 @@ import java.util.*;
 import static com.ppi115.cafefe.control.ValidacionComercial.*;
 
 /** Operaciones de facturación y cobro. */
-@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class FacturacionService {

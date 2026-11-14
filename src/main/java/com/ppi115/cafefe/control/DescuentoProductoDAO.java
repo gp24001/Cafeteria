@@ -1,27 +1,16 @@
 package com.ppi115.cafefe.control;
 
 import java.util.Map;
-
 import java.util.HashMap;
-
 import java.util.Date;
-
 import java.util.Collection;
-
 import java.util.ArrayList;
-
 import java.math.RoundingMode;
-
 import java.math.BigDecimal;
-
 import jakarta.persistence.TemporalType;
-
 import com.ppi115.cafefe.entity.Producto;
-
 import com.ppi115.cafefe.entity.OrdenProducto;
-
 import com.ppi115.cafefe.entity.Descuento;
-
 import com.ppi115.cafefe.entity.DescuentoProducto;
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
@@ -31,7 +20,6 @@ import java.util.List;
 import java.util.UUID;
 
 /** Acceso a datos de descuento asignado a un producto. Valida los datos antes de persistir y utiliza EntityManager para consultar sus referencias. */
-@jakarta.enterprise.context.Dependent
 @Stateless
 @LocalBean
 public class DescuentoProductoDAO extends DefaultDAO<DescuentoProducto> {

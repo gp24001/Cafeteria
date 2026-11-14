@@ -34,6 +34,24 @@ public class RestCrudIntegracionTest extends ComercialDAOIntegracionBase<Caja> {
         }
     }
 
+    @Test void facturaConservaLosIdentificadoresDeRelacionesDiferidas() throws Exception {
+        UUID id = factura.getIdFactura();
+        UUID idCaja = caja.getIdCaja();
+        UUID idEmpleadoRol = empleadoRol.getIdEmpleadoRol();
+        em.flush();
+        em.clear();
+        FacturaResource r = recurso(FacturaResource.class, dao(new FacturaDAO()));
+        try (Response respuesta = r.findById(id.toString());
+             var lector = jakarta.json.Json.createReader(new java.io.StringReader((String) respuesta.getEntity()))) {
+            assertEquals(200, respuesta.getStatus());
+            var datos = lector.readObject();
+            assertEquals(idCaja.toString(), datos.getJsonObject("idCaja").getString("idCaja"));
+            assertEquals(idEmpleadoRol.toString(), datos.getJsonObject("idEmpleadoRol").getString("idEmpleadoRol"));
+            assertEquals(1, datos.getJsonObject("idCaja").size());
+            assertEquals(1, datos.getJsonObject("idEmpleadoRol").size());
+        }
+    }
+
     @Test void crudDevuelveJSONYNoDejaDatosTrasRollback() throws Exception {
         CajaResource r = recurso(CajaResource.class, dao(new CajaDAO()));
         Caja nueva = registroValido(Caja.class);
