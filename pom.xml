@@ -75,8 +75,8 @@
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>15.0.17</version>
-
             <classifier>jakarta</classifier>
+            <scope>provided</scope>
         </dependency>
            
     </dependencies>
@@ -107,9 +107,7 @@
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>3.12.3</version>
             <configuration>
-                <installDirectory>
-                   C:\Users\jazmi\Downloads\openliberty-jakartaee11-26.0.0.8\wlp
-                </installDirectory>
+                <installDirectory>/usr/local/openliberty/wlp_26.0.0.9</installDirectory>
                 <serverName>cafefeServer</serverName>
             </configuration>
             </plugin>
